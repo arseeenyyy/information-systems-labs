@@ -22,5 +22,5 @@ public class DragonCave {
     private long id;
     @Column(name = "number_of_treasures", nullable = false) 
     @Min(1)
-    private Long numberOfTreasures; //Поле может быть null, Значение поля должно быть больше 0
+    private Long numberOfTreasures; 
 }

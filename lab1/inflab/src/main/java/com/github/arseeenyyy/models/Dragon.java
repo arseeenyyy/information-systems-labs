@@ -71,7 +71,7 @@ public class Dragon {
     private DragonCharacter character; //Поле может быть null
     
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) 
-    @Column(name = "head_id")
+    @JoinColumn(name = "head_id")
     private DragonHead head;
 
     @Builder
