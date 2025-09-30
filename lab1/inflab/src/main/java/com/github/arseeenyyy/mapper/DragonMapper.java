@@ -13,7 +13,7 @@ public class DragonMapper {
         Dragon dragon = new Dragon(); 
         dragon.setName(requestDto.getName()); 
         dragon.setCoordinates(requestDto.getCoordinates()); 
-        dragon.setCave(requestDto.getDragonCave());
+        dragon.setCave(requestDto.getCave());
         dragon.setKiller(requestDto.getKiller()); 
         dragon.setAge(requestDto.getAge()); 
         dragon.setWeight(requestDto.getWeight()); 

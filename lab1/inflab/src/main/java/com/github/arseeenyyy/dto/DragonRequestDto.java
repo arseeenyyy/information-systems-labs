@@ -25,7 +25,7 @@ public class DragonRequestDto {
     @NotNull 
     private Coordinates coordinates;
 
-    private DragonCave dragonCave;
+    private DragonCave cave;
 
     private Person killer;
 
