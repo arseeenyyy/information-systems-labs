@@ -5,10 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class CoordinatesResponseDto {
+@NoArgsConstructor 
+public class DragonHeadResponseDto {
     private long id;
-    private double x; 
-    private double y;
+    private int size;
+    private Integer eyesCount;
 }
