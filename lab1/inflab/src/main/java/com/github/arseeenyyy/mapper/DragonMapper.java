@@ -9,7 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped 
 public class DragonMapper {
     
-    public Dragon toEntity(DragonRequestDto requestDto) {
+    public static Dragon toEntity(DragonRequestDto requestDto) {
         Dragon dragon = new Dragon(); 
         dragon.setName(requestDto.getName()); 
         dragon.setCoordinates(requestDto.getCoordinates()); 
@@ -23,7 +23,7 @@ public class DragonMapper {
         return dragon;
     }
 
-    public DragonResponseDto toResponseDto(Dragon dragon) {
+    public static DragonResponseDto toResponseDto(Dragon dragon) {
         return new DragonResponseDto(
             dragon.getId(), 
             dragon.getName(), 

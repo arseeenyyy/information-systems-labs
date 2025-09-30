@@ -8,7 +8,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class LocationMapper {
     
-    public Location toEntity(LocationRequestDto requestDto) {
+    public static Location toEntity(LocationRequestDto requestDto) {
         Location location = new Location();
         location.setX(requestDto.getX());
         location.setY(requestDto.getY());
@@ -17,7 +17,7 @@ public class LocationMapper {
         return location;
     }
     
-    public LocationResponseDto toResponseDto(Location location) {
+    public static LocationResponseDto toResponseDto(Location location) {
         return new LocationResponseDto(
             location.getId(),
             location.getX(),

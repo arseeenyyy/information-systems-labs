@@ -17,27 +17,24 @@ public class LocationService {
     @Inject
     private LocationRepository locationRepository;
     
-    @Inject
-    private LocationMapper locationMapper;
-    
     @Transactional
     public LocationResponseDto createLocation(LocationRequestDto requestDto) {
-        Location location = locationMapper.toEntity(requestDto);
+        Location location = LocationMapper.toEntity(requestDto);
         Location savedLocation = locationRepository.save(location);
-        return locationMapper.toResponseDto(savedLocation);
+        return LocationMapper.toResponseDto(savedLocation);
     }
     
     public List<LocationResponseDto> getAllLocations() {
         List<Location> locations = locationRepository.findAll();
         return locations.stream()
-                .map(locationMapper::toResponseDto)
+                .map(LocationMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
     
     public LocationResponseDto getLocationById(Long id) {
         Location location = locationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Location not found with id: " + id));
-        return locationMapper.toResponseDto(location);
+        return LocationMapper.toResponseDto(location);
     }
     
     @Transactional
@@ -50,13 +47,12 @@ public class LocationService {
         Location existingLocation = locationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Location not found with id: " + id));
         
-        // Обновляем поля
         existingLocation.setX(requestDto.getX());
         existingLocation.setY(requestDto.getY());
         existingLocation.setZ(requestDto.getZ());
         existingLocation.setName(requestDto.getName());
         
         Location updatedLocation = locationRepository.update(existingLocation);
-        return locationMapper.toResponseDto(updatedLocation);
+        return LocationMapper.toResponseDto(updatedLocation);
     }
 }

@@ -8,13 +8,13 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped 
 public class DragonCaveMapper {
-    public DragonCave toEntity(DragonCaveRequestDto requestDto) {
+    public static DragonCave toEntity(DragonCaveRequestDto requestDto) {
         DragonCave cave = new DragonCave();
         cave.setNumberOfTreasures(requestDto.getNumberOfTreasures());
         return cave;
     } 
 
-    public DragonCaveResponseDto toResponseDto(DragonCave cave) {
+    public static DragonCaveResponseDto toResponseDto(DragonCave cave) {
         return new DragonCaveResponseDto(
             cave.getId(),
             cave.getNumberOfTreasures()

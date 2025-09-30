@@ -9,14 +9,14 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class DragonHeadMapper {
 
-    public DragonHead toEntity(DragonHeadRequestDto requestDto) {
+    public static DragonHead toEntity(DragonHeadRequestDto requestDto) {
         DragonHead head = new DragonHead();
         head.setEyesCount(requestDto.getEyesCount()); 
         head.setSize(requestDto.getSize());
         return head;
     }
 
-    public DragonHeadResponseDto toResponseDto(DragonHead head) {
+    public static DragonHeadResponseDto toResponseDto(DragonHead head) {
         return new DragonHeadResponseDto(
             head.getId(), 
             head.getEyesCount(), 

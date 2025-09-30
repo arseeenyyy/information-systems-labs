@@ -9,7 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class PersonMapper {
 
-    public Person toEntity(PersonRequestDto requestDto) {
+    public static Person toEntity(PersonRequestDto requestDto) {
         Person person = new Person();
         person.setName(requestDto.getName()); 
         person.setEyeColor(requestDto.getEyeColor());
@@ -20,7 +20,7 @@ public class PersonMapper {
         return person;
     }
 
-    public PersonResponseDto toResponseDto(Person person) {
+    public static PersonResponseDto toResponseDto(Person person) {
         return new PersonResponseDto(
             person.getId(), 
             person.getName(), 
