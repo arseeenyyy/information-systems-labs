@@ -16,8 +16,8 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table
-@Entity(name = "dragon_cave") 
+@Entity
+@Table(name = "dragon_cave")
 public class DragonCave {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

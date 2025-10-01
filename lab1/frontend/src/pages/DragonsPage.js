@@ -1,36 +1,13 @@
 import React, { useState } from 'react';
 import DragonTable from '../components/dragons/DragonTable';
 import DragonForm from '../components/dragons/DragonForm';
-import DragonDetails from '../components/dragons/DragonDetails';
+// import DragonDetails from '../components/dragons/DragonDetails';
+// import Pagination from '../components/common/Pagination';
 
 function DragonsPage() {
   const [dragons, setDragons] = useState([
-    { 
-      id: 1, 
-      name: 'Smaug', 
-      age: 150, 
-      color: 'RED', 
-      weight: 5000, 
-      character: 'EVIL',
-      coordinates: { id: 1, x: 100, y: 200 },
-      creationDate: '2024-01-15',
-      cave: { id: 1, numberOfTreasures: 1000 },
-      killer: null,
-      head: { id: 1, size: 50, eyesCount: 2 }
-    },
-    { 
-      id: 2, 
-      name: 'Toothless', 
-      age: 20, 
-      color: 'BLACK', 
-      weight: 800, 
-      character: 'FRIENDLY',
-      coordinates: { id: 2, x: 300, y: 400 },
-      creationDate: '2024-01-10',
-      cave: null,
-      killer: { id: 1, name: 'Arthur' },
-      head: { id: 2, size: 35, eyesCount: 2 }
-    }
+    { id: 1, name: 'Smaug', age: 150, color: 'RED', weight: 5000, character: 'EVIL' },
+    { id: 2, name: 'Toothless', age: 20, color: 'BLACK', weight: 800, character: 'FRIENDLY' }
   ]);
   
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -38,11 +15,7 @@ function DragonsPage() {
   const [viewingDragon, setViewingDragon] = useState(null);
 
   const handleCreateDragon = (dragonData) => {
-    const newDragon = { 
-      ...dragonData, 
-      id: Date.now(),
-      creationDate: new Date().toISOString().split('T')[0]
-    };
+    const newDragon = { ...dragonData, id: Date.now() };
     setDragons(prev => [...prev, newDragon]);
     setShowCreateModal(false);
   };
@@ -53,31 +26,22 @@ function DragonsPage() {
   };
 
   const handleDeleteDragon = (id) => {
-    setDragons(prev => prev.filter(d => d.id !== id));
-    setViewingDragon(null);
-  };
-
-  const handleViewDragon = (id) => {
-    const dragon = dragons.find(d => d.id === id);
-    setViewingDragon(dragon);
+    if (window.confirm('Delete this dragon?')) {
+      setDragons(prev => prev.filter(d => d.id !== id));
+    }
   };
 
   return (
     <div>
       <h1>Dragons Management</h1>
       
-      <button 
-        onClick={() => setShowCreateModal(true)}
-        style={{ marginBottom: '20px', padding: '10px 20px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px' }}
-      >
-        Create New Dragon
-      </button>
+      <button onClick={() => setShowCreateModal(true)}>Create New Dragon</button>
 
       <DragonTable
         dragons={dragons}
         onEdit={setEditingDragon}
         onDelete={handleDeleteDragon}
-        onView={handleViewDragon}
+        onView={setViewingDragon}
       />
 
       <DragonForm
@@ -93,14 +57,13 @@ function DragonsPage() {
         onSave={handleEditDragon}
       />
 
-      {viewingDragon && (
+      {/* {viewingDragon && (
         <DragonDetails
           dragon={viewingDragon}
           onClose={() => setViewingDragon(null)}
           onEdit={setEditingDragon}
-          onDelete={handleDeleteDragon}
         />
-      )}
+      )} */}
     </div>
   );
 }

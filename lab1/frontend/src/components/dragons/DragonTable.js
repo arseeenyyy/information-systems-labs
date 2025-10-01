@@ -1,49 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 import EntityTable from '../common/EntityTable';
+import DragonContextMenu from './DragonContextMenu';
 
 function DragonTable({ dragons, onEdit, onDelete, onView }) {
+  const [contextMenu, setContextMenu] = useState(null);
+  const [selectedDragon, setSelectedDragon] = useState(null);
+
   const columns = [
     { key: 'id', title: 'ID' },
     { key: 'name', title: 'Name' },
     { key: 'age', title: 'Age' },
-    { key: 'weight', title: 'Weight' },
     { key: 'color', title: 'Color' },
-    { key: 'character', title: 'Character' },
-    { 
-      key: 'coordinates', 
-      title: 'Coordinates',
-      render: (coordinates) => coordinates ? `(${coordinates.x}, ${coordinates.y})` : 'None'
-    },
-    { 
-      key: 'creationDate', 
-      title: 'Creation Date',
-      render: (date) => date ? new Date(date).toLocaleDateString() : 'Not set'
-    },
-    { 
-      key: 'cave', 
-      title: 'Cave',
-      render: (cave) => cave ? `#${cave.id} (${cave.numberOfTreasures} treasures)` : 'None'
-    },
-    { 
-      key: 'killer', 
-      title: 'Killer', 
-      render: (killer) => killer ? killer.name : 'None'
-    },
-    { 
-      key: 'head', 
-      title: 'Head',
-      render: (head) => head ? `Size: ${head.size}, Eyes: ${head.eyesCount}` : 'None'
-    }
+    { key: 'weight', title: 'Weight' },
+    { key: 'character', title: 'Character' }
   ];
 
+  const handleContextMenu = (e, dragon) => {
+    e.preventDefault();
+    setSelectedDragon(dragon);
+    setContextMenu({ x: e.clientX, y: e.clientY });
+  };
+
+  const handleCloseContextMenu = () => {
+    setContextMenu(null);
+    setSelectedDragon(null);
+  };
+
   return (
-    <EntityTable
-      columns={columns}
-      data={dragons}
-      onEdit={onEdit}
-      onDelete={onDelete}
-      onRowClick={(dragon) => onView(dragon.id)}
-    />
+    <>
+      <EntityTable
+        columns={columns}
+        data={dragons}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        onRowClick={onView}
+      />
+      
+      {contextMenu && selectedDragon && (
+        <DragonContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          dragon={selectedDragon}
+          onEdit={() => { onEdit(selectedDragon); handleCloseContextMenu(); }}
+          onDelete={() => { onDelete(selectedDragon.id); handleCloseContextMenu(); }}
+          onView={() => { onView(selectedDragon.id); handleCloseContextMenu(); }}
+          onClose={handleCloseContextMenu}
+        />
+      )}
+    </>
   );
 }
 
