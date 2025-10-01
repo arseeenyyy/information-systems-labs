@@ -1,7 +1,7 @@
 import React from 'react';
 import EntityTable from '../common/EntityTable';
 
-function PersonTable({ persons, onEdit, onDelete }) {
+function PersonTable() {
   const columns = [
     { key: 'id', title: 'ID' },
     { key: 'name', title: 'Name' },
@@ -12,13 +12,12 @@ function PersonTable({ persons, onEdit, onDelete }) {
     { key: 'usedAsKiller', title: 'Used as Killer' }
   ];
 
-  // Заглушка данных
-  const data = persons || [
+  const data = [
     { id: 1, name: 'Arthur', eyeColor: 'BLUE', hairColor: 'BLONDE', height: 180, nationality: 'ENGLAND', usedAsKiller: 'Dragon #1' },
     { id: 2, name: 'Lancelot', eyeColor: 'GREEN', hairColor: 'BROWN', height: 185, nationality: 'FRANCE', usedAsKiller: 'Dragon #2' }
   ];
 
-  return <EntityTable columns={columns} data={data} onEdit={onEdit} onDelete={onDelete} />;
+  return <EntityTable columns={columns} data={data} />;
 }
 
 export default PersonTable;

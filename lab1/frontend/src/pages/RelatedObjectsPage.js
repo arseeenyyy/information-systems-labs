@@ -10,18 +10,12 @@ function RelatedObjectsPage() {
 
   const renderTable = () => {
     switch (activeTab) {
-      case 'persons': 
-        return <PersonTable />;
-      case 'caves': 
-        return <DragonCaveTable />;
-      case 'heads': 
-        return <DragonHeadTable />;
-      case 'coordinates': 
-        return <CoordinatesTable />;
-      case 'locations': 
-        return <LocationTable />;
-      default: 
-        return <PersonTable />;
+      case 'persons': return <PersonTable />;
+      case 'caves': return <DragonCaveTable />;
+      case 'heads': return <DragonHeadTable />;
+      case 'coordinates': return <CoordinatesTable />;
+      case 'locations': return <LocationTable />;
+      default: return <PersonTable />;
     }
   };
 
@@ -30,36 +24,11 @@ function RelatedObjectsPage() {
       <h1>Related Objects Management</h1>
       
       <div style={{ marginBottom: '20px' }}>
-        <button 
-          onClick={() => setActiveTab('persons')}
-          style={{ marginRight: '10px', padding: '8px 16px' }}
-        >
-          Persons
-        </button>
-        <button 
-          onClick={() => setActiveTab('caves')}
-          style={{ marginRight: '10px', padding: '8px 16px' }}
-        >
-          Caves
-        </button>
-        <button 
-          onClick={() => setActiveTab('heads')}
-          style={{ marginRight: '10px', padding: '8px 16px' }}
-        >
-          Heads
-        </button>
-        <button 
-          onClick={() => setActiveTab('coordinates')}
-          style={{ marginRight: '10px', padding: '8px 16px' }}
-        >
-          Coordinates
-        </button>
-        <button 
-          onClick={() => setActiveTab('locations')}
-          style={{ padding: '8px 16px' }}
-        >
-          Locations
-        </button>
+        <button onClick={() => setActiveTab('persons')}>Persons</button>
+        <button onClick={() => setActiveTab('caves')}>Caves</button>
+        <button onClick={() => setActiveTab('heads')}>Heads</button>
+        <button onClick={() => setActiveTab('coordinates')}>Coordinates</button>
+        <button onClick={() => setActiveTab('locations')}>Locations</button>
       </div>
 
       {renderTable()}

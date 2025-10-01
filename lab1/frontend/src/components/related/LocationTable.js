@@ -1,7 +1,7 @@
 import React from 'react';
 import EntityTable from '../common/EntityTable';
 
-function LocationTable({ locations, onEdit, onDelete }) {
+function LocationTable() {
   const columns = [
     { key: 'id', title: 'ID' },
     { key: 'x', title: 'X' },
@@ -12,12 +12,12 @@ function LocationTable({ locations, onEdit, onDelete }) {
     { key: 'usedByDragon', title: 'Used by Dragon' }
   ];
 
-  const data = locations || [
+  const data = [
     { id: 1, x: 100, y: 200, z: 300, name: 'Forest', usedByPerson: 'Arthur', usedByDragon: 'None' },
     { id: 2, x: 500, y: 600, z: 700, name: 'Mountain', usedByPerson: 'None', usedByDragon: 'Dragon #1' }
   ];
 
-  return <EntityTable columns={columns} data={data} onEdit={onEdit} onDelete={onDelete} />;
+  return <EntityTable columns={columns} data={data} />;
 }
 
 export default LocationTable;

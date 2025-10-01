@@ -17,4 +17,4 @@ function CoordinatesTable() {
   return <EntityTable columns={columns} data={data} />;
 }
 
-export default CoordinatesTable; 
+export default CoordinatesTable;

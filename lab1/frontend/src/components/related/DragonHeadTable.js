@@ -17,4 +17,4 @@ function DragonHeadTable() {
   return <EntityTable columns={columns} data={data} />;
 }
 
-export default DragonHeadTable; 
+export default DragonHeadTable;

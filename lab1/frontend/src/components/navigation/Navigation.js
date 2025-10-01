@@ -5,13 +5,20 @@ function Navigation({ currentPage, onPageChange }) {
     <div style={{ marginBottom: '20px', borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
       <button 
         onClick={() => onPageChange('dragons')}
-        style={{ fontWeight: currentPage === 'dragons' ? 'bold' : 'normal' }}
+        style={{ 
+          marginRight: '10px',
+          fontWeight: currentPage === 'dragons' ? 'bold' : 'normal',
+          padding: '8px 16px'
+        }}
       >
         Dragons
       </button>
       <button 
         onClick={() => onPageChange('related')}
-        style={{ fontWeight: currentPage === 'related' ? 'bold' : 'normal' }}
+        style={{ 
+          fontWeight: currentPage === 'related' ? 'bold' : 'normal',
+          padding: '8px 16px'
+        }}
       >
         Related Objects
       </button>
