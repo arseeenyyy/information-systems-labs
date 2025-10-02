@@ -2,24 +2,28 @@ package com.github.arseeenyyy.mapper;
 
 import com.github.arseeenyyy.dto.DragonRequestDto;
 import com.github.arseeenyyy.dto.DragonResponseDto;
+import com.github.arseeenyyy.models.Coordinates;
 import com.github.arseeenyyy.models.Dragon;
+import com.github.arseeenyyy.models.DragonCave;
+import com.github.arseeenyyy.models.DragonHead;
+import com.github.arseeenyyy.models.Person;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped 
 public class DragonMapper {
     
-    public static Dragon toEntity(DragonRequestDto requestDto) {
+    public static Dragon toEntity(DragonRequestDto requestDto, Coordinates coordinates, DragonCave cave, Person killer, DragonHead head) {
         Dragon dragon = new Dragon(); 
         dragon.setName(requestDto.getName()); 
-        dragon.setCoordinates(requestDto.getCoordinates()); 
-        dragon.setCave(requestDto.getCave());
-        dragon.setKiller(requestDto.getKiller()); 
+        dragon.setCoordinates(coordinates); 
+        dragon.setCave(cave);
+        dragon.setKiller(killer); 
         dragon.setAge(requestDto.getAge()); 
         dragon.setWeight(requestDto.getWeight()); 
         dragon.setColor(requestDto.getColor()); 
         dragon.setCharacter(requestDto.getCharacter()); 
-        dragon.setHead(requestDto.getHead());
+        dragon.setHead(head);
         return dragon;
     }
 
@@ -27,15 +31,15 @@ public class DragonMapper {
         return new DragonResponseDto(
             dragon.getId(), 
             dragon.getName(), 
-            dragon.getCoordinates(), 
+            CoordinatesMapper.toResponseDto(dragon.getCoordinates()), 
             dragon.getCreationDate(), 
-            dragon.getCave(), 
-            dragon.getKiller(), 
+            DragonCaveMapper.toResponseDto(dragon.getCave()), 
+            PersonMapper.toResponseDto(dragon.getKiller()), 
             dragon.getAge(), 
             dragon.getWeight(), 
             dragon.getColor(), 
             dragon.getCharacter(), 
-            dragon.getHead()
+            DragonHeadMapper.toResponseDto(dragon.getHead())
         );
     }
 }

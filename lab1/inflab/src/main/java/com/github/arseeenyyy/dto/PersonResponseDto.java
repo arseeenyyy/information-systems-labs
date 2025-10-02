@@ -2,7 +2,6 @@ package com.github.arseeenyyy.dto;
 
 import com.github.arseeenyyy.models.Color;
 import com.github.arseeenyyy.models.Country;
-import com.github.arseeenyyy.models.Location;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +15,7 @@ public class PersonResponseDto {
     private String name;
     private Color eyeColor;
     private Color hairColor;
-    private Location location;
+    private LocationResponseDto location;
     private int height;
     private Country nationality;
 }

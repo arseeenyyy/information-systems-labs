@@ -2,7 +2,6 @@ package com.github.arseeenyyy.dto;
 
 import com.github.arseeenyyy.models.Color;
 import com.github.arseeenyyy.models.Country;
-import com.github.arseeenyyy.models.Location;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -22,7 +21,7 @@ public class PersonRequestDto {
     @NotNull
     private Color eyeColor;
     private Color hairColor;
-    private Location location;
+    private Long locationId;
 
     @Min(1) 
     private int height;
