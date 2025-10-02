@@ -41,7 +41,7 @@ public class Dragon {
     @NotBlank
     private String name; //Поле не может быть null, Строка не может быть пустой
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coordinates_id", nullable = false) 
     @NotNull
     private Coordinates coordinates; //Поле не может быть null
@@ -50,11 +50,11 @@ public class Dragon {
     @Column(name = "creation_date", nullable = false)
     private java.time.LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cave_id")
     private DragonCave cave; //Поле может быть null
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "killer_id")
     private Person killer; //Поле может быть null
 
@@ -75,7 +75,7 @@ public class Dragon {
     @Column(name = "dragon_character") 
     private DragonCharacter character; //Поле может быть null
     
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) 
+    @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "head_id")
     private DragonHead head;
 
