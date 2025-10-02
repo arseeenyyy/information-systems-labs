@@ -6,7 +6,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @ApplicationScoped
 public class LocationRepository {
@@ -27,6 +26,9 @@ public class LocationRepository {
     
 
     public Location findById(Long id) {
+        if (id == null) {
+            return null;
+        }
         return entityManager.find(Location.class, id);
     }
     

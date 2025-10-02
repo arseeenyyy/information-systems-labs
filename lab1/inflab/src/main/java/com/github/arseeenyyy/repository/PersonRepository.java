@@ -6,7 +6,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @ApplicationScoped 
 public class PersonRepository {
@@ -25,12 +24,11 @@ public class PersonRepository {
             .getResultList();
     }
 
-    // public Optional<Person> findById(Long id) {
-    //     Person person = entityManager.find(Person.class, id);
-    //     return Optional.ofNullable(person);
-    // }
 
     public Person findById(Long id) {
+        if (id == null) {
+            return null;
+        }
         return entityManager.find(Person.class, id);
     }
 

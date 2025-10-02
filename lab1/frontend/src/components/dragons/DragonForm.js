@@ -8,17 +8,27 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
     weight: '',
     color: '',
     character: '',
-    coordinates: null,
-    cave: null,
-    killer: null,
-    head: null
+    coordinatesId: '',
+    caveId: '',
+    killerId: '',
+    headId: ''
   });
 
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (dragon) {
-      setFormData(dragon);
+      setFormData({
+        name: dragon.name || '',
+        age: dragon.age || '',
+        weight: dragon.weight || '',
+        color: dragon.color || '',
+        character: dragon.character || '',
+        coordinatesId: dragon.coordinates?.id || '',
+        caveId: dragon.cave?.id || '',
+        killerId: dragon.killer?.id || '',
+        headId: dragon.head?.id || ''
+      });
     } else {
       setFormData({
         name: '',
@@ -26,38 +36,61 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
         weight: '',
         color: '',
         character: '',
-        coordinates: null,
-        cave: null,
-        killer: null,
-        head: null
+        coordinatesId: '',
+        caveId: '',
+        killerId: '',
+        headId: ''
       });
     }
     setErrors({});
   }, [dragon, isOpen]);
 
-  const handleSubmit = (e) => {
+    const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Простая валидация
     if (!formData.name?.trim()) {
-      setErrors({ name: 'Name is required' });
-      return;
+        setErrors({ name: 'Name is required' });
+        return;
     }
     if (!formData.age || formData.age <= 0) {
-      setErrors({ age: 'Age must be greater than 0' });
-      return;
+        setErrors({ age: 'Age must be greater than 0' });
+        return;
     }
     if (!formData.weight || formData.weight <= 0) {
-      setErrors({ weight: 'Weight must be greater than 0' });
-      return;
+        setErrors({ weight: 'Weight must be greater than 0' });
+        return;
     }
-    if (!formData.coordinates) {
-      setErrors({ coordinates: 'Coordinates are required' });
-      return;
+    if (!formData.coordinatesId) {
+        setErrors({ coordinates: 'Coordinates are required' });
+        return;
     }
 
-    onSave(formData);
-  };
+    const coordinatesId = parseInt(formData.coordinatesId);
+    if (isNaN(coordinatesId) || coordinatesId <= 0) {
+        setErrors({ coordinates: 'Please select valid coordinates' });
+        return;
+    }
+
+    const dragonData = {
+        name: formData.name.trim(),
+        age: parseInt(formData.age),
+        weight: parseFloat(formData.weight),
+        color: formData.color || null,
+        character: formData.character || null,
+        coordinatesId: coordinatesId,
+        caveId: formData.caveId && formData.caveId !== '' ? parseInt(formData.caveId) : null,
+        killerId: formData.killerId && formData.killerId !== '' ? parseInt(formData.killerId) : null,
+        headId: formData.headId && formData.headId !== '' ? parseInt(formData.headId) : null
+    };
+
+    if (!dragonData.coordinatesId) {
+        setErrors({ coordinates: 'Coordinates are required' });
+        return;
+    }
+
+    console.log('Sending dragon data:', dragonData);
+    onSave(dragonData);
+    };
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -66,20 +99,10 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
     }
   };
 
-  const handleObjectSelect = (objectType, objectId) => {
-    if (!objectId) {
-      handleChange(objectType, null);
-      return;
-    }
-
-    const objects = existingObjects[objectType] || [];
-    const object = objects.find(obj => obj.id == objectId);
-    handleChange(objectType, object || null);
-  };
-
   const renderObjectSelector = (type, label, required = false) => {
     const objects = existingObjects[type] || [];
-    const currentValue = formData[type]?.id || '';
+    const fieldName = `${type}Id`;
+    const currentValue = formData[fieldName] || '';
 
     return (
       <div style={{ marginBottom: '15px' }}>
@@ -88,7 +111,7 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
         </label>
         <select
           value={currentValue}
-          onChange={(e) => handleObjectSelect(type, e.target.value)}
+          onChange={(e) => handleChange(fieldName, e.target.value)}
           style={{
             width: '100%',
             padding: '8px 12px',
@@ -159,7 +182,7 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
               <input
                 type="number"
                 value={formData.age}
-                onChange={(e) => handleChange('age', parseInt(e.target.value) || '')}
+                onChange={(e) => handleChange('age', e.target.value)}
                 min="1"
                 style={{
                   width: '100%',
@@ -185,7 +208,7 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
                 type="number"
                 step="0.1"
                 value={formData.weight}
-                onChange={(e) => handleChange('weight', parseFloat(e.target.value) || '')}
+                onChange={(e) => handleChange('weight', e.target.value)}
                 min="0.1"
                 style={{
                   width: '100%',
@@ -211,7 +234,7 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
               </label>
               <select
                 value={formData.color || ''}
-                onChange={(e) => handleChange('color', e.target.value || null)}
+                onChange={(e) => handleChange('color', e.target.value)}
                 style={{
                   width: '100%',
                   padding: '8px 12px',
@@ -233,7 +256,7 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
               </label>
               <select
                 value={formData.character || ''}
-                onChange={(e) => handleChange('character', e.target.value || null)}
+                onChange={(e) => handleChange('character', e.target.value)}
                 style={{
                   width: '100%',
                   padding: '8px 12px',

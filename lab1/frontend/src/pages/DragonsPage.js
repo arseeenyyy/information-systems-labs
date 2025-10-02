@@ -57,7 +57,19 @@ function DragonsPage() {
 
   const handleCreateDragon = async (dragonData) => {
     try {
-      const newDragon = await dragonService.create(dragonData);
+      const apiData = {
+        name: dragonData.name,
+        age: parseInt(dragonData.age),
+        weight: parseFloat(dragonData.weight),
+        color: dragonData.color || null,
+        character: dragonData.character || null,
+        coordinatesId: parseInt(dragonData.coordinatesId),
+        caveId: dragonData.caveId ? parseInt(dragonData.caveId) : null,
+        killerId: dragonData.killerId ? parseInt(dragonData.killerId) : null,
+        headId: dragonData.headId ? parseInt(dragonData.headId) : null
+      };
+
+      const newDragon = await dragonService.create(apiData);
       setDragons(prev => [...prev, newDragon]);
       setShowCreateModal(false);
     } catch (err) {
@@ -68,7 +80,19 @@ function DragonsPage() {
 
   const handleEditDragon = async (dragonData) => {
     try {
-      const updatedDragon = await dragonService.update(editingDragon.id, dragonData);
+      const apiData = {
+        name: dragonData.name,
+        age: parseInt(dragonData.age),
+        weight: parseFloat(dragonData.weight),
+        color: dragonData.color || null,
+        character: dragonData.character || null,
+        coordinatesId: parseInt(dragonData.coordinatesId),
+        caveId: dragonData.caveId ? parseInt(dragonData.caveId) : null,
+        killerId: dragonData.killerId ? parseInt(dragonData.killerId) : null,
+        headId: dragonData.headId ? parseInt(dragonData.headId) : null
+      };
+
+      const updatedDragon = await dragonService.update(editingDragon.id, apiData);
       setDragons(prev => prev.map(d => 
         d.id === editingDragon.id ? updatedDragon : d
       ));

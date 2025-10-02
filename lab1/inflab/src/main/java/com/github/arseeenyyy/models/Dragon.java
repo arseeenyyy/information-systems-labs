@@ -1,6 +1,8 @@
 package com.github.arseeenyyy.models;
 
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,7 +46,8 @@ public class Dragon {
     @NotNull
     private Coordinates coordinates; //Поле не может быть null
 
-    @Column(name = "creation_date", nullable = false, updatable = false)
+    @CreationTimestamp
+    @Column(name = "creation_date", nullable = false)
     private java.time.LocalDate creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

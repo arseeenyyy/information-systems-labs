@@ -19,27 +19,13 @@ function DragonDetails({ dragon, onClose, onEdit, onDelete }) {
             Basic Information
           </h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-            <div>
-              <strong>ID:</strong> {dragon.id}
-            </div>
-            <div>
-              <strong>Name:</strong> {dragon.name}
-            </div>
-            <div>
-              <strong>Age:</strong> {dragon.age}
-            </div>
-            <div>
-              <strong>Weight:</strong> {dragon.weight} kg
-            </div>
-            <div>
-              <strong>Color:</strong> {dragon.color || 'Not specified'}
-            </div>
-            <div>
-              <strong>Character:</strong> {dragon.character || 'Not specified'}
-            </div>
-            <div>
-              <strong>Creation Date:</strong> {dragon.creationDate ? new Date(dragon.creationDate).toLocaleDateString() : 'Not set'}
-            </div>
+            <div><strong>ID:</strong> {dragon.id}</div>
+            <div><strong>Name:</strong> {dragon.name}</div>
+            <div><strong>Age:</strong> {dragon.age}</div>
+            <div><strong>Weight:</strong> {dragon.weight} kg</div>
+            <div><strong>Color:</strong> {dragon.color || 'Not specified'}</div>
+            <div><strong>Character:</strong> {dragon.character || 'Not specified'}</div>
+            <div><strong>Creation Date:</strong> {dragon.creationDate ? new Date(dragon.creationDate).toLocaleDateString() : 'Not set'}</div>
           </div>
         </div>
 
@@ -57,8 +43,12 @@ function DragonDetails({ dragon, onClose, onEdit, onDelete }) {
             <strong>Cave:</strong> {dragon.cave ? `Cave with ${dragon.cave.numberOfTreasures} treasures` : 'None'}
           </div>
           
+          <div style={{ marginBottom: '15px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
+            <strong>Killer:</strong> {dragon.killer ? `${dragon.killer.name} (${dragon.killer.eyeColor} eyes)` : 'None'}
+          </div>
+          
           <div style={{ padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
-            <strong>Head:</strong> {dragon.head ? `Size: ${dragon.head.size}, Eyes: ${dragon.head.eyesCount || 'Not specified'}` : 'None'}
+            <strong>Head:</strong> {dragon.head ? `Size: ${dragon.head.size}` + (dragon.head.eyesCount ? `, Eyes: ${dragon.head.eyesCount}` : '') : 'None'}
           </div>
         </div>
 

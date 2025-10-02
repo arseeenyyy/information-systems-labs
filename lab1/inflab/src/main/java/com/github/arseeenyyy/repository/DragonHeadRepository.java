@@ -6,7 +6,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @ApplicationScoped 
 public class DragonHeadRepository {
@@ -26,6 +25,9 @@ public class DragonHeadRepository {
     }
 
     public DragonHead findById(Long id) {
+        if (id == null) {
+            return null;
+        }
         return entityManager.find(DragonHead.class, id);
     }
 

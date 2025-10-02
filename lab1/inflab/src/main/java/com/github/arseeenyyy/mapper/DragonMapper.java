@@ -33,13 +33,13 @@ public class DragonMapper {
             dragon.getName(), 
             CoordinatesMapper.toResponseDto(dragon.getCoordinates()), 
             dragon.getCreationDate(), 
-            DragonCaveMapper.toResponseDto(dragon.getCave()), 
-            PersonMapper.toResponseDto(dragon.getKiller()), 
+            dragon.getCave() != null ? DragonCaveMapper.toResponseDto(dragon.getCave()) : null,
+            dragon.getKiller() != null ? PersonMapper.toResponseDto(dragon.getKiller()) : null,
             dragon.getAge(), 
             dragon.getWeight(), 
             dragon.getColor(), 
             dragon.getCharacter(), 
-            DragonHeadMapper.toResponseDto(dragon.getHead())
+            dragon.getHead() != null ? DragonHeadMapper.toResponseDto(dragon.getHead()) : null
         );
     }
 }

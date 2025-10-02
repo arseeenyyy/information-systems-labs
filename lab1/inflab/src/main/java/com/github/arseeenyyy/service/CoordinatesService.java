@@ -23,14 +23,14 @@ public class CoordinatesService {
         Coordinates savedCoordinates = repository.save(coordinates);
         return CoordinatesMapper.toResponseDto(savedCoordinates);
     }
-    
+
     public List<CoordinatesResponseDto> getAll() {
         List<Coordinates> coordinates = repository.findAll();
         return coordinates.stream()
                 .map(CoordinatesMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
-    
+
     public CoordinatesResponseDto getById(Long id) {
         Coordinates coordinates = repository.findById(id); 
         if (coordinates == null) {
@@ -56,7 +56,6 @@ public class CoordinatesService {
         Coordinates updatedCoordinates = repository.update(existingCoordinates);
         return CoordinatesMapper.toResponseDto(updatedCoordinates);
     }
-    
     
     public long count() {
         return repository.findAll().size();

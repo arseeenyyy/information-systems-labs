@@ -1,7 +1,6 @@
 package com.github.arseeenyyy.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.github.arseeenyyy.models.Coordinates;
 
@@ -27,9 +26,12 @@ public class CoordinatesRepository {
             .getResultList();
     }
     public Coordinates findById(Long id) {
+        if (id == null) {
+            return null;
+        }
         return entityManager.find(Coordinates.class, id);
     }
-    
+
     @Transactional 
     public void delete(Long id) {
         Coordinates coordinates = entityManager.find(Coordinates.class, id);

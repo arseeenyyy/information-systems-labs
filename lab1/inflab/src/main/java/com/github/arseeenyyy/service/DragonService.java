@@ -7,13 +7,11 @@ import com.github.arseeenyyy.models.Coordinates;
 import com.github.arseeenyyy.models.Dragon;
 import com.github.arseeenyyy.models.DragonCave;
 import com.github.arseeenyyy.models.DragonHead;
-import com.github.arseeenyyy.models.Location;
 import com.github.arseeenyyy.models.Person;
 import com.github.arseeenyyy.repository.CoordinatesRepository;
 import com.github.arseeenyyy.repository.DragonCaveRepository;
 import com.github.arseeenyyy.repository.DragonHeadRepository;
 import com.github.arseeenyyy.repository.DragonRepository;
-import com.github.arseeenyyy.repository.LocationRepository;
 import com.github.arseeenyyy.repository.PersonRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -57,6 +55,7 @@ public class DragonService {
         return DragonMapper.toResponseDto(savedDragon);
     }
     
+    @Transactional
     public List<DragonResponseDto> getAll() {
         List<Dragon> dragons = dragonRepository.findAll();
         return dragons.stream()

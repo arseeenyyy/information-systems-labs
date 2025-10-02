@@ -1,4 +1,5 @@
-const API_BASE = 'http://127.0.0.1:8080/inflab/api';
+// src/services/api.js
+const API_BASE = 'http://localhost:8080/inflab/api';
 
 const api = {
   async request(url, options = {}) {
@@ -15,7 +16,6 @@ const api = {
       throw new Error(error || `HTTP error! status: ${response.status}`);
     }
 
-    // Для DELETE запросов может не быть тела
     if (response.status === 204) {
       return null;
     }
@@ -97,57 +97,4 @@ export const locationService = {
   create: (location) => api.post('/locations', location),
   update: (id, location) => api.put(`/locations/${id}`, location),
   delete: (id) => api.delete(`/locations/${id}`),
-};
-
-
-export const dataTransformers = {
-  // Для создания/обновления дракона - отправляем только ID связанных объектов
-  toDragonRequest(dragonData) {
-    return {
-      name: dragonData.name,
-      age: dragonData.age,
-      weight: dragonData.weight,
-      color: dragonData.color,
-      character: dragonData.character,
-      coordinates: dragonData.coordinates ? { id: dragonData.coordinates.id } : null,
-      cave: dragonData.cave ? { id: dragonData.cave.id } : null,
-      killer: dragonData.killer ? { id: dragonData.killer.id } : null,
-      head: dragonData.head ? { id: dragonData.head.id } : null
-    };
-  },
-
-  // Для создания coordinates
-  toCoordinatesRequest(coordinatesData) {
-    return {
-      x: coordinatesData.x,
-      y: coordinatesData.y
-    };
-  },
-
-  // Для создания cave
-  toCaveRequest(caveData) {
-    return {
-      numberOfTreasures: caveData.numberOfTreasures
-    };
-  },
-
-  // Для создания person
-  toPersonRequest(personData) {
-    return {
-      name: personData.name,
-      eyeColor: personData.eyeColor,
-      hairColor: personData.hairColor,
-      height: personData.height,
-      nationality: personData.nationality,
-      location: personData.location ? { id: personData.location.id } : null
-    };
-  },
-
-  // Для создания head
-  toHeadRequest(headData) {
-    return {
-      size: headData.size,
-      eyesCount: headData.eyesCount
-    };
-  }
 };
