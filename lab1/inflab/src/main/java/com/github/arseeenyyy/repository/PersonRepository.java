@@ -25,9 +25,13 @@ public class PersonRepository {
             .getResultList();
     }
 
-    public Optional<Person> findById(Long id) {
-        Person person = entityManager.find(Person.class, id);
-        return Optional.ofNullable(person);
+    // public Optional<Person> findById(Long id) {
+    //     Person person = entityManager.find(Person.class, id);
+    //     return Optional.ofNullable(person);
+    // }
+
+    public Person findById(Long id) {
+        return entityManager.find(Person.class, id);
     }
 
     @Transactional 

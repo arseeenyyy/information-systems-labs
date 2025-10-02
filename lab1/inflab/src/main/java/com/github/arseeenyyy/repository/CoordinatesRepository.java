@@ -26,12 +26,10 @@ public class CoordinatesRepository {
         return entityManager.createQuery("SELECT C FROM Coordinates C", Coordinates.class)
             .getResultList();
     }
-
-    public Optional<Coordinates> findById(Long id) {
-        Coordinates coordinates = entityManager.find(Coordinates.class, id);
-        return Optional.ofNullable(coordinates);
+    public Coordinates findById(Long id) {
+        return entityManager.find(Coordinates.class, id);
     }
-
+    
     @Transactional 
     public void delete(Long id) {
         Coordinates coordinates = entityManager.find(Coordinates.class, id);

@@ -25,11 +25,12 @@ public class LocationRepository {
                 .getResultList();
     }
     
-    public Optional<Location> findById(Long id) {
-        Location location = entityManager.find(Location.class, id);
-        return Optional.ofNullable(location);
+
+    public Location findById(Long id) {
+        return entityManager.find(Location.class, id);
     }
     
+
     @Transactional
     public void delete(Long id) {
         Location location = entityManager.find(Location.class, id);

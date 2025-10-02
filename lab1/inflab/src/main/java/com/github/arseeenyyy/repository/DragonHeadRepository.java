@@ -25,10 +25,10 @@ public class DragonHeadRepository {
             .getResultList();
     }
 
-    public Optional<DragonHead> findById(Long id) {
-        DragonHead head = entityManager.find(DragonHead.class, id);
-        return Optional.ofNullable(head);
+    public DragonHead findById(Long id) {
+        return entityManager.find(DragonHead.class, id);
     }
+
 
     @Transactional 
     public void delete(Long id) {

@@ -32,8 +32,10 @@ public class DragonHeadService {
     }
     
     public DragonHeadResponseDto getById(Long id) {
-        DragonHead head = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Dragon head not found with id: " + id));
+        DragonHead head = repository.findById(id);
+        if (head == null) {
+            throw new RuntimeException("DragonHead not found with id: " + id);
+        }
         return DragonHeadMapper.toResponseDto(head);
     }
     
@@ -44,9 +46,10 @@ public class DragonHeadService {
     
     @Transactional
     public DragonHeadResponseDto update(Long id, DragonHeadRequestDto requestDto) {
-        DragonHead existingHead = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Dragon head not found with id: " + id));
-        
+        DragonHead existingHead = repository.findById(id);
+        if (existingHead == null) {
+            throw new RuntimeException("DragonHead not found with id: " + id);
+        }        
         existingHead.setSize(requestDto.getSize());
         existingHead.setEyesCount(requestDto.getEyesCount());
         

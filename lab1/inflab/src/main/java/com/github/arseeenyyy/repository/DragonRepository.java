@@ -6,7 +6,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @ApplicationScoped 
 public class DragonRepository {
@@ -25,9 +24,8 @@ public class DragonRepository {
             .getResultList();
     }
 
-    public Optional<Dragon> findById(Long id) {
-        Dragon dragon = entityManager.find(Dragon.class, id);
-        return Optional.ofNullable(dragon);
+    public Dragon findById(Long id) {
+        return entityManager.find(Dragon.class, id);
     }
 
     @Transactional 

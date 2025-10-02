@@ -15,38 +15,6 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
   });
 
   const [errors, setErrors] = useState({});
-  const [availableObjects, setAvailableObjects] = useState({
-    coordinates: [],
-    caves: [],
-    persons: [],
-    heads: []
-  });
-
-  useEffect(() => {
-    if (existingObjects) {
-      setAvailableObjects(existingObjects);
-    } else {
-      // Mock данные для демонстрации
-      setAvailableObjects({
-        coordinates: [
-          { id: 1, x: 100, y: 200 },
-          { id: 2, x: 300, y: 400 }
-        ],
-        caves: [
-          { id: 1, numberOfTreasures: 1000 },
-          { id: 2, numberOfTreasures: 500 }
-        ],
-        persons: [
-          { id: 1, name: 'Arthur', eyeColor: 'BLUE', height: 180 },
-          { id: 2, name: 'Lancelot', eyeColor: 'GREEN', height: 185 }
-        ],
-        heads: [
-          { id: 1, size: 50, eyesCount: 2 },
-          { id: 2, size: 75, eyesCount: 3 }
-        ]
-      });
-    }
-  }, [existingObjects]);
 
   useEffect(() => {
     if (dragon) {
@@ -67,34 +35,24 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
     setErrors({});
   }, [dragon, isOpen]);
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    // Required fields validation
-    if (!formData.name?.trim()) {
-      newErrors.name = 'Name is required and cannot be empty';
-    }
-
-    if (!formData.age || formData.age <= 0) {
-      newErrors.age = 'Age must be greater than 0';
-    }
-
-    if (!formData.weight || formData.weight <= 0) {
-      newErrors.weight = 'Weight must be greater than 0';
-    }
-
-    if (!formData.coordinates) {
-      newErrors.coordinates = 'Coordinates are required';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    if (!validateForm()) {
+    // Простая валидация
+    if (!formData.name?.trim()) {
+      setErrors({ name: 'Name is required' });
+      return;
+    }
+    if (!formData.age || formData.age <= 0) {
+      setErrors({ age: 'Age must be greater than 0' });
+      return;
+    }
+    if (!formData.weight || formData.weight <= 0) {
+      setErrors({ weight: 'Weight must be greater than 0' });
+      return;
+    }
+    if (!formData.coordinates) {
+      setErrors({ coordinates: 'Coordinates are required' });
       return;
     }
 
@@ -103,7 +61,6 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
@@ -115,12 +72,13 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
       return;
     }
 
-    const object = availableObjects[objectType]?.find(obj => obj.id == objectId);
+    const objects = existingObjects[objectType] || [];
+    const object = objects.find(obj => obj.id == objectId);
     handleChange(objectType, object || null);
   };
 
   const renderObjectSelector = (type, label, required = false) => {
-    const objects = availableObjects[type] || [];
+    const objects = existingObjects[type] || [];
     const currentValue = formData[type]?.id || '';
 
     return (
@@ -143,7 +101,7 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
           {objects.map(obj => (
             <option key={obj.id} value={obj.id}>
               {type === 'coordinates' && `(${obj.x}, ${obj.y})`}
-              {type === 'caves' && `Cave with ${obj.numberOfTreasures} treasures`}
+              {type === 'caves' && `Cave with ${obj.numberOfTreasures || 'no'} treasures`}
               {type === 'persons' && `${obj.name} (${obj.eyeColor} eyes)`}
               {type === 'heads' && `Head size: ${obj.size}` + (obj.eyesCount ? `, eyes: ${obj.eyesCount}` : '')}
             </option>
@@ -298,9 +256,9 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
           <h3 style={{ marginBottom: '15px', color: '#333' }}>Related Objects</h3>
           
           {renderObjectSelector('coordinates', 'Coordinates', true)}
-          {renderObjectSelector('cave', 'Dragon Cave')}
-          {renderObjectSelector('killer', 'Killer (Person)')}
-          {renderObjectSelector('head', 'Dragon Head')}
+          {renderObjectSelector('caves', 'Dragon Cave')}
+          {renderObjectSelector('persons', 'Killer (Person)')}
+          {renderObjectSelector('heads', 'Dragon Head')}
         </div>
 
         {/* Buttons */}

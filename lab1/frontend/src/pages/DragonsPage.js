@@ -1,128 +1,149 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DragonTable from '../components/dragons/DragonTable';
 import DragonForm from '../components/dragons/DragonForm';
 import DragonDetails from '../components/dragons/DragonDetails';
+import { 
+  dragonService, 
+  coordinatesService, 
+  caveService, 
+  personService, 
+  headService 
+} from '../services/api';
 
 function DragonsPage() {
-  // Mock данные для демонстрации
-  const mockObjects = {
-    coordinates: [
-      { id: 1, x: 100, y: 200 },
-      { id: 2, x: 300, y: 400 },
-      { id: 3, x: 150, y: 250 }
-    ],
-    caves: [
-      { id: 1, numberOfTreasures: 1000 },
-      { id: 2, numberOfTreasures: 500 },
-      { id: 3, numberOfTreasures: 750 }
-    ],
-    persons: [
-      { 
-        id: 1, 
-        name: 'Arthur', 
-        eyeColor: 'BLUE', 
-        hairColor: 'BLONDE',
-        height: 180,
-        nationality: 'SPAIN'
-      },
-      { 
-        id: 2, 
-        name: 'Lancelot', 
-        eyeColor: 'GREEN', 
-        hairColor: 'BROWN',
-        height: 185,
-        nationality: 'ITALY'
-      }
-    ],
-    heads: [
-      { id: 1, size: 50, eyesCount: 2 },
-      { id: 2, size: 75, eyesCount: 3 },
-      { id: 3, size: 60, eyesCount: null }
-    ]
-  };
-
-  const [dragons, setDragons] = useState([
-    {
-      id: 1,
-      name: 'Smaug',
-      age: 150,
-      weight: 5000,
-      color: 'RED',
-      character: 'EVIL',
-      coordinates: mockObjects.coordinates[0],
-      creationDate: '2024-01-15T00:00:00Z',
-      cave: mockObjects.caves[0],
-      killer: null,
-      head: mockObjects.heads[0]
-    },
-    {
-      id: 2,
-      name: 'Toothless',
-      age: 20,
-      weight: 800,
-      color: 'BLACK',
-      character: 'FRIENDLY',
-      coordinates: mockObjects.coordinates[1],
-      creationDate: '2024-01-10T00:00:00Z',
-      cave: null,
-      killer: mockObjects.persons[0],
-      head: mockObjects.heads[1]
-    },
-    {
-      id: 3,
-      name: 'Draco',
-      age: 75,
-      weight: 2500,
-      color: 'GREEN',
-      character: 'CHAOTIC',
-      coordinates: mockObjects.coordinates[2],
-      creationDate: '2024-01-20T00:00:00Z',
-      cave: mockObjects.caves[1],
-      killer: null,
-      head: mockObjects.heads[2]
-    }
-  ]);
+  const [dragons, setDragons] = useState([]);
+  const [availableObjects, setAvailableObjects] = useState({
+    coordinates: [],
+    caves: [],
+    persons: [],
+    heads: []
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingDragon, setEditingDragon] = useState(null);
   const [viewingDragon, setViewingDragon] = useState(null);
 
-  const handleCreateDragon = (dragonData) => {
-    const newDragon = {
-      ...dragonData,
-      id: Date.now(), // Mock ID generation
-      creationDate: new Date().toISOString()
-    };
-    setDragons(prev => [...prev, newDragon]);
-    setShowCreateModal(false);
+  useEffect(() => {
+    loadAllData();
+  }, []);
+
+  const loadAllData = async () => {
+    try {
+      setLoading(true);
+      const [dragonsData, coordinatesData, cavesData, personsData, headsData] = await Promise.all([
+        dragonService.getAll(),
+        coordinatesService.getAll(),
+        caveService.getAll(),
+        personService.getAll(),
+        headService.getAll()
+      ]);
+
+      setDragons(dragonsData);
+      setAvailableObjects({
+        coordinates: coordinatesData || [],
+        caves: cavesData || [],
+        persons: personsData || [],
+        heads: headsData || []
+      });
+    } catch (err) {
+      setError(err.message);
+      console.error('Error loading data:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleEditDragon = (dragonData) => {
-    setDragons(prev => prev.map(d => 
-      d.id === editingDragon.id ? { ...d, ...dragonData } : d
-    ));
-    setEditingDragon(null);
+  const handleCreateDragon = async (dragonData) => {
+    try {
+      const newDragon = await dragonService.create(dragonData);
+      setDragons(prev => [...prev, newDragon]);
+      setShowCreateModal(false);
+    } catch (err) {
+      console.error('Error creating dragon:', err);
+      alert(`Error creating dragon: ${err.message}`);
+    }
   };
 
-  const handleDeleteDragon = (id) => {
-    setDragons(prev => prev.filter(d => d.id !== id));
-    setViewingDragon(null);
+  const handleEditDragon = async (dragonData) => {
+    try {
+      const updatedDragon = await dragonService.update(editingDragon.id, dragonData);
+      setDragons(prev => prev.map(d => 
+        d.id === editingDragon.id ? updatedDragon : d
+      ));
+      setEditingDragon(null);
+    } catch (err) {
+      console.error('Error updating dragon:', err);
+      alert(`Error updating dragon: ${err.message}`);
+    }
+  };
+
+  const handleDeleteDragon = async (id) => {
+    try {
+      await dragonService.delete(id);
+      setDragons(prev => prev.filter(d => d.id !== id));
+      setViewingDragon(null);
+    } catch (err) {
+      console.error('Error deleting dragon:', err);
+      alert(`Error deleting dragon: ${err.message}`);
+    }
   };
 
   const handleViewDragon = (dragon) => {
     setViewingDragon(dragon);
   };
 
+  const refreshData = () => {
+    loadAllData();
+  };
+
+  if (loading) {
+    return (
+      <div className="container">
+        <div style={{ textAlign: 'center', padding: '40px' }}>
+          Loading dragons and related objects...
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container">
+        <div style={{ color: '#dc3545', textAlign: 'center', padding: '40px' }}>
+          Error: {error}
+          <br />
+          <button onClick={refreshData} className="btn btn-primary" style={{ marginTop: '10px' }}>
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container">
       <div className="header">
         <h1>Dragons Management System</h1>
-        <button 
-          onClick={() => setShowCreateModal(true)}
-          className="btn btn-primary"
-        >
-          Create New Dragon
-        </button>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <button 
+            onClick={refreshData}
+            className="btn btn-secondary"
+          >
+            Refresh Data
+          </button>
+          <button 
+            onClick={() => setShowCreateModal(true)}
+            className="btn btn-primary"
+          >
+            Create New Dragon
+          </button>
+        </div>
+      </div>
+
+      <div style={{ marginBottom: '15px', color: '#6c757d' }}>
+        Total dragons: {dragons.length}
       </div>
 
       <DragonTable
@@ -130,24 +151,21 @@ function DragonsPage() {
         onRowClick={handleViewDragon}
       />
 
-      {/* Create Dragon Modal */}
       <DragonForm
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         onSave={handleCreateDragon}
-        existingObjects={mockObjects}
+        existingObjects={availableObjects}
       />
 
-      {/* Edit Dragon Modal */}
       <DragonForm
         isOpen={!!editingDragon}
         onClose={() => setEditingDragon(null)}
         dragon={editingDragon}
         onSave={handleEditDragon}
-        existingObjects={mockObjects}
+        existingObjects={availableObjects}
       />
 
-      {/* Dragon Details Modal */}
       {viewingDragon && (
         <DragonDetails
           dragon={viewingDragon}

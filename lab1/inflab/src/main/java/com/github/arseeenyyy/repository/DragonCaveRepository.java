@@ -25,11 +25,9 @@ public class DragonCaveRepository {
             .getResultList();
     }
 
-    public Optional<DragonCave> findById(Long id) {
-        DragonCave cave = entityManager.find(DragonCave.class, id);
-        return Optional.ofNullable(cave);
+    public DragonCave findById(Long id) {
+        return entityManager.find(DragonCave.class, id);
     }
-
     @Transactional 
     public void delete(Long id) {
         DragonCave cave = entityManager.find(DragonCave.class, id);

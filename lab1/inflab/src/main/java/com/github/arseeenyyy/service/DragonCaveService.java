@@ -32,8 +32,10 @@ public class DragonCaveService {
     }
     
     public DragonCaveResponseDto getById(Long id) {
-        DragonCave cave = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Dragon cave not found with id: " + id));
+        DragonCave cave = repository.findById(id); 
+        if (cave == null) {
+            throw new RuntimeException("DragonCave not found with id: " + id);
+        }
         return DragonCaveMapper.toResponseDto(cave);
     }
     
@@ -44,9 +46,10 @@ public class DragonCaveService {
     
     @Transactional
     public DragonCaveResponseDto update(Long id, DragonCaveRequestDto requestDto) {
-        DragonCave existingCave = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Dragon cave not found with id: " + id));
-        
+        DragonCave existingCave = repository.findById(id);
+        if (existingCave == null) {
+            throw new RuntimeException("DragonCave not found with id: " + id);
+        }        
         existingCave.setNumberOfTreasures(requestDto.getNumberOfTreasures());
         
         DragonCave updatedCave = repository.update(existingCave);

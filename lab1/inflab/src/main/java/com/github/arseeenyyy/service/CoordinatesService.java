@@ -32,8 +32,10 @@ public class CoordinatesService {
     }
     
     public CoordinatesResponseDto getById(Long id) {
-        Coordinates coordinates = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Coordinates not found with id: " + id));
+        Coordinates coordinates = repository.findById(id); 
+        if (coordinates == null) {
+            throw new RuntimeException("Coordinates not found with id: " + id);
+        }
         return CoordinatesMapper.toResponseDto(coordinates);
     }
     
@@ -44,9 +46,10 @@ public class CoordinatesService {
     
     @Transactional
     public CoordinatesResponseDto update(Long id, CoordinatesRequestDto requestDto) {
-        Coordinates existingCoordinates = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Coordinates not found with id: " + id));
-        
+        Coordinates existingCoordinates = repository.findById(id);
+        if (existingCoordinates == null) {
+            throw new RuntimeException("Coordinates not found with id: " + id);
+        }
         existingCoordinates.setX(requestDto.getX());
         existingCoordinates.setY(requestDto.getY());
         
@@ -59,7 +62,7 @@ public class CoordinatesService {
         return repository.findAll().size();
     }
     
-    public boolean existsById(Long id) {
-        return repository.findById(id).isPresent();
-    }
+    // public boolean existsById(Long id) {
+    //     return repository.findById(id).isPresent();
+    // }
 }

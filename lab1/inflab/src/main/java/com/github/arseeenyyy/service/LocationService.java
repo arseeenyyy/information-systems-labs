@@ -32,8 +32,10 @@ public class LocationService {
     }
     
     public LocationResponseDto getLocationById(Long id) {
-        Location location = locationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Location not found with id: " + id));
+        Location location = locationRepository.findById(id);
+        if (location == null) {
+            throw new RuntimeException("Location not found with id: " + id);
+        }
         return LocationMapper.toResponseDto(location);
     }
     
@@ -44,8 +46,10 @@ public class LocationService {
     
     @Transactional
     public LocationResponseDto updateLocation(Long id, LocationRequestDto requestDto) {
-        Location existingLocation = locationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Location not found with id: " + id));
+        Location existingLocation = locationRepository.findById(id);
+        if (existingLocation == null) {
+            throw new RuntimeException("Location not found with id: " + id);
+        }
         
         existingLocation.setX(requestDto.getX());
         existingLocation.setY(requestDto.getY());

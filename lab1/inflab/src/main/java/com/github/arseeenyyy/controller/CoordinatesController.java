@@ -74,12 +74,12 @@ public class CoordinatesController {
         return Response.ok().entity(count).build();
     }
     
-    @GET
-    @Path("/{id}/exists")
-    public Response exists(@PathParam("id") Long id) {
-        boolean exists = coordinatesService.existsById(id);
-        return Response.ok().entity(exists).build();
-    }
+    // @GET
+    // @Path("/{id}/exists")
+    // public Response exists(@PathParam("id") Long id) {
+    //     boolean exists = coordinatesService.existsById(id);
+    //     return Response.ok().entity(exists).build();
+    // }
     
     @GET
     @Path("/test")
