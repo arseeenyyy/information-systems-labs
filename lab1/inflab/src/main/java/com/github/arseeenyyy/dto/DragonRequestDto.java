@@ -34,7 +34,6 @@ public class DragonRequestDto {
     private Integer age;
 
     @Min(1) 
-    @NotNull
     private double weight;
 
     private Color color;

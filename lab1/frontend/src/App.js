@@ -1,23 +1,11 @@
-import React, { useState } from 'react';
-import Navigation from './components/navigation/Navigation';
+import React from 'react';
 import DragonsPage from './pages/DragonsPage';
-import RelatedObjectsPage from './pages/RelatedObjectsPage';
+import './App.css';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('dragons');
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'dragons': return <DragonsPage />;
-      case 'related': return <RelatedObjectsPage />;
-      default: return <DragonsPage />;
-    }
-  };
-
   return (
-    <div style={{ padding: '20px' }}>
-      <Navigation currentPage={currentPage} onPageChange={setCurrentPage} />
-      {renderPage()}
+    <div className="App">
+      <DragonsPage />
     </div>
   );
 }

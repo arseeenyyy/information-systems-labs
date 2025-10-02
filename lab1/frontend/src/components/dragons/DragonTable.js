@@ -1,38 +1,62 @@
 import React from 'react';
 import EntityTable from '../common/EntityTable';
 
-function DragonTable({ dragons, onEdit, onDelete, onView }) {
+function DragonTable({ dragons, onRowClick }) {
   const columns = [
-    { key: 'id', title: 'ID' },
-    { key: 'name', title: 'Name' },
-    { key: 'age', title: 'Age' },
-    { key: 'weight', title: 'Weight' },
-    { key: 'color', title: 'Color' },
-    { key: 'character', title: 'Character' },
-    { 
-      key: 'coordinates', 
+    {
+      key: 'id',
+      title: 'ID',
+      render: (value) => value || 'N/A'
+    },
+    {
+      key: 'name',
+      title: 'Name',
+      render: (value) => value || 'N/A'
+    },
+    {
+      key: 'age',
+      title: 'Age',
+      render: (value) => value || 'N/A'
+    },
+    {
+      key: 'weight',
+      title: 'Weight',
+      render: (value) => value ? `${value} kg` : 'N/A'
+    },
+    {
+      key: 'color',
+      title: 'Color',
+      render: (value) => value || 'Not specified'
+    },
+    {
+      key: 'character',
+      title: 'Character',
+      render: (value) => value || 'Not specified'
+    },
+    {
+      key: 'coordinates',
       title: 'Coordinates',
-      render: (coordinates) => coordinates ? `(${coordinates.x}, ${coordinates.y})` : 'None'
+      render: (value) => value ? `(${value.x}, ${value.y})` : 'None'
     },
-    { 
-      key: 'creationDate', 
+    {
+      key: 'creationDate',
       title: 'Creation Date',
-      render: (date) => date ? new Date(date).toLocaleDateString() : 'Not set'
+      render: (value) => value ? new Date(value).toLocaleDateString() : 'N/A'
     },
-    { 
-      key: 'cave', 
+    {
+      key: 'cave',
       title: 'Cave',
-      render: (cave) => cave ? `#${cave.id} (${cave.numberOfTreasures} treasures)` : 'None'
+      render: (value) => value ? `${value.numberOfTreasures} treasures` : 'None'
     },
-    { 
-      key: 'killer', 
-      title: 'Killer', 
-      render: (killer) => killer ? killer.name : 'None'
+    {
+      key: 'killer',
+      title: 'Killer',
+      render: (value) => value ? value.name : 'None'
     },
-    { 
-      key: 'head', 
+    {
+      key: 'head',
       title: 'Head',
-      render: (head) => head ? `Size: ${head.size}, Eyes: ${head.eyesCount}` : 'None'
+      render: (value) => value ? `Size: ${value.size}` + (value.eyesCount ? `, Eyes: ${value.eyesCount}` : '') : 'None'
     }
   ];
 
@@ -40,9 +64,7 @@ function DragonTable({ dragons, onEdit, onDelete, onView }) {
     <EntityTable
       columns={columns}
       data={dragons}
-      onEdit={onEdit}
-      onDelete={onDelete}
-      onRowClick={(dragon) => onView(dragon.id)}
+      onRowClick={onRowClick}
     />
   );
 }
