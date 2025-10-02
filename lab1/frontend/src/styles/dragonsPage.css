@@ -1,0 +1,36 @@
+.dragons-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dragons-title {
+  margin: 0;
+  color: #333;
+  font-size: 2rem;
+}
+
+.dragons-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.dragons-count {
+  margin-bottom: 15px;
+  color: var(--secondary-color);
+  font-size: 14px;
+}
+
+.loading-container,
+.error-container {
+  text-align: center;
+  padding: 40px;
+}
+
+.error-container {
+  color: var(--danger-color);
+}

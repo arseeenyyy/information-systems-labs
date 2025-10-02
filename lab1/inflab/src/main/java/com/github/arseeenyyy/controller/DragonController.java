@@ -71,4 +71,35 @@ public class DragonController {
     public List<DragonResponseDto> findByColor(@PathParam("color") String color) {
         return dragonService.findByColor(color);
     }
+    @DELETE
+    @Path("/color/{color}/all")
+    public Response deleteAllByColor(@PathParam("color") String color) {
+        try {
+            dragonService.deleteAllByColor(color);
+            return Response.ok("All dragons with color " + color + " have been deleted").build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Error deleting dragons by color: " + e.getMessage())
+                    .build();
+        }
+    }
+    
+    @DELETE
+    @Path("/color/{color}/one")
+    public Response deleteOneByColor(@PathParam("color") String color) {
+        try {
+            dragonService.deleteOneByColor(color);
+            return Response.ok("One dragon with color " + color + " has been deleted").build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Error deleting one dragon by color: " + e.getMessage())
+                    .build();
+        }
+    }
+    
+    @GET
+    @Path("/name-starts-with/{substring}")
+    public List<DragonResponseDto> findByNameStartingWith(@PathParam("substring") String substring) {
+        return dragonService.findByNameStartingWith(substring);
+    }
 }

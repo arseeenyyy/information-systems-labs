@@ -1,0 +1,43 @@
+.dragon-form {
+  min-width: 500px;
+}
+
+.dragon-form-section {
+  margin-bottom: 20px;
+}
+
+.dragon-form-section:last-child {
+  margin-bottom: 0;
+}
+
+.dragon-form-section-title {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.dragon-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.object-selector {
+  margin-bottom: 15px;
+}
+
+.object-selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.object-selector-label {
+  font-weight: 500;
+}
+
+.object-selector-create-btn {
+  font-size: 12px;
+  padding: 4px 8px;
+}

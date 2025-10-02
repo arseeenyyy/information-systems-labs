@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DragonTable from '../components/dragons/DragonTable';
 import DragonForm from '../components/dragons/DragonForm';
 import DragonDetails from '../components/dragons/DragonDetails';
+import '../styles/dragonsPage.css'
 import { 
   dragonService, 
   coordinatesService, 
@@ -102,11 +103,12 @@ function DragonsPage() {
       alert(`Error updating dragon: ${err.message}`);
     }
   };
+
   const handleRelatedEntityCreated = (type, newEntity) => {
-  setAvailableObjects(prev => ({
-    ...prev,
-    [type]: [...prev[type], newEntity]
-  }));
+    setAvailableObjects(prev => ({
+      ...prev,
+      [type]: [...prev[type], newEntity]
+    }));
   };
 
   const handleDeleteDragon = async (id) => {
@@ -131,7 +133,7 @@ function DragonsPage() {
   if (loading) {
     return (
       <div className="container">
-        <div style={{ textAlign: 'center', padding: '40px' }}>
+        <div className="loading-container">
           Loading dragons and related objects...
         </div>
       </div>
@@ -141,10 +143,10 @@ function DragonsPage() {
   if (error) {
     return (
       <div className="container">
-        <div style={{ color: '#dc3545', textAlign: 'center', padding: '40px' }}>
+        <div className="error-container">
           Error: {error}
           <br />
-          <button onClick={refreshData} className="btn btn-primary" style={{ marginTop: '10px' }}>
+          <button onClick={refreshData} className="btn btn-primary mt-15">
             Retry
           </button>
         </div>
@@ -154,9 +156,9 @@ function DragonsPage() {
 
   return (
     <div className="container">
-      <div className="header">
-        <h1>Dragons Management System</h1>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+      <div className="dragons-header">
+        <h1 className="dragons-title">Dragons Management System</h1>
+        <div className="dragons-actions">
           <button 
             onClick={refreshData}
             className="btn btn-secondary"
@@ -172,7 +174,7 @@ function DragonsPage() {
         </div>
       </div>
 
-      <div style={{ marginBottom: '15px', color: '#6c757d' }}>
+      <div className="dragons-count">
         Total dragons: {dragons.length}
       </div>
 
@@ -186,7 +188,7 @@ function DragonsPage() {
         onClose={() => setShowCreateModal(false)}
         onSave={handleCreateDragon}
         existingObjects={availableObjects}
-        onRelatedEntityCreated={handleRelatedEntityCreated} // Добавляем эту строку
+        onRelatedEntityCreated={handleRelatedEntityCreated}
       />
 
       <DragonForm
@@ -195,8 +197,9 @@ function DragonsPage() {
         dragon={editingDragon}
         onSave={handleEditDragon}
         existingObjects={availableObjects}
-        onRelatedEntityCreated={handleRelatedEntityCreated} // И эту строку
+        onRelatedEntityCreated={handleRelatedEntityCreated}
       />
+
       {viewingDragon && (
         <DragonDetails
           dragon={viewingDragon}

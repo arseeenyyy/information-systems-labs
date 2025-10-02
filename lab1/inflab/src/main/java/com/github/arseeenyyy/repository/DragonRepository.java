@@ -1,5 +1,6 @@
 package com.github.arseeenyyy.repository;
 
+import com.github.arseeenyyy.models.Color;
 import com.github.arseeenyyy.models.Dragon;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -41,10 +42,21 @@ public class DragonRepository {
         return entityManager.merge(dragon);
     }
 
-    public List<Dragon> findByColor(String color) {
+     public List<Dragon> findByColor(String color) {
+        try {
+            Color colorEnum = Color.valueOf(color.toUpperCase());
+            return entityManager.createQuery(
+                "SELECT d FROM Dragon d WHERE d.color = :color", Dragon.class)
+                .setParameter("color", colorEnum)
+                .getResultList();
+        } catch (IllegalArgumentException e) {
+            return List.of();
+        }
+    }
+    public List<Dragon> findByNameStartingWith(String substring) {
         return entityManager.createQuery(
-            "SELECT d FROM Dragon d WHERE d.color = :color", Dragon.class)
-            .setParameter("color", color)
+            "SELECT d FROM Dragon d WHERE LOWER(d.name) LIKE LOWER(:substring)", Dragon.class)
+            .setParameter("substring", substring + "%")
             .getResultList();
     }
 }

@@ -69,11 +69,4 @@ public class PersonService {
         Person updatedPerson = personRepository.update(existingPerson);
         return PersonMapper.toResponseDto(updatedPerson);
     }
-    
-    public List<PersonResponseDto> findByEyeColor(String eyeColor) {
-        List<Person> persons = personRepository.findByEyeColor(eyeColor);
-        return persons.stream()
-                .map(PersonMapper::toResponseDto)
-                .collect(Collectors.toList());
-    }
 }

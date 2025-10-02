@@ -1,0 +1,51 @@
+.table-container {
+  overflow-x: auto;
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.entity-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+.entity-table thead tr {
+  background-color: var(--light-color);
+}
+
+.entity-table th {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 2px solid var(--border-color);
+  font-weight: 600;
+  color: #495057;
+  white-space: nowrap;
+}
+
+.entity-table tbody tr {
+  border-bottom: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.entity-table tbody tr.clickable {
+  cursor: pointer;
+}
+
+.entity-table tbody tr.clickable:hover {
+  background-color: var(--light-color);
+}
+
+.entity-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: top;
+}
+
+.table-empty {
+  text-align: center;
+  padding: 40px;
+  color: var(--secondary-color);
+  background-color: white;
+}

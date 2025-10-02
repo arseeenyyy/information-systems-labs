@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from '../common/Modal';
+import '../../styles/dragonDetails.css';
 
 function DragonDetails({ dragon, onClose, onEdit, onDelete }) {
   if (!dragon) return null;
@@ -11,14 +12,12 @@ function DragonDetails({ dragon, onClose, onEdit, onDelete }) {
   };
 
   return (
-    <Modal isOpen={true} onClose={onClose} title="Dragon Details">
-      <div style={{ minWidth: '500px' }}>
+    <Modal isOpen={true} onClose={onClose} title="Dragon Details" size="large">
+      <div className="dragon-details-container">
         {/* Basic Information */}
-        <div style={{ marginBottom: '25px' }}>
-          <h3 style={{ marginBottom: '15px', color: '#333', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
-            Basic Information
-          </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+        <div className="dragon-details-section">
+          <h3 className="dragon-details-title">Basic Information</h3>
+          <div className="dragon-details-grid">
             <div><strong>ID:</strong> {dragon.id}</div>
             <div><strong>Name:</strong> {dragon.name}</div>
             <div><strong>Age:</strong> {dragon.age}</div>
@@ -30,30 +29,28 @@ function DragonDetails({ dragon, onClose, onEdit, onDelete }) {
         </div>
 
         {/* Related Objects */}
-        <div style={{ marginBottom: '25px' }}>
-          <h3 style={{ marginBottom: '15px', color: '#333', borderBottom: '1px solid #eee', paddingBottom: '10px' }}>
-            Related Objects
-          </h3>
+        <div className="dragon-details-section">
+          <h3 className="dragon-details-title">Related Objects</h3>
           
-          <div style={{ marginBottom: '15px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
+          <div className="dragon-details-item">
             <strong>Coordinates:</strong> {dragon.coordinates ? `(${dragon.coordinates.x}, ${dragon.coordinates.y})` : 'None'}
           </div>
           
-          <div style={{ marginBottom: '15px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
+          <div className="dragon-details-item">
             <strong>Cave:</strong> {dragon.cave ? `Cave with ${dragon.cave.numberOfTreasures} treasures` : 'None'}
           </div>
           
-          <div style={{ marginBottom: '15px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
+          <div className="dragon-details-item">
             <strong>Killer:</strong> {dragon.killer ? `${dragon.killer.name} (${dragon.killer.eyeColor} eyes)` : 'None'}
           </div>
           
-          <div style={{ padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '4px' }}>
+          <div className="dragon-details-item">
             <strong>Head:</strong> {dragon.head ? `Size: ${dragon.head.size}` + (dragon.head.eyesCount ? `, Eyes: ${dragon.head.eyesCount}` : '') : 'None'}
           </div>
         </div>
 
         {/* Actions */}
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', borderTop: '1px solid #eee', paddingTop: '20px' }}>
+        <div className="dragon-details-actions">
           <button
             onClick={() => { onEdit(dragon); onClose(); }}
             className="btn btn-primary"

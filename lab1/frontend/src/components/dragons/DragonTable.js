@@ -65,6 +65,7 @@ function DragonTable({ dragons, onRowClick }) {
       columns={columns}
       data={dragons}
       onRowClick={onRowClick}
+      emptyMessage="No dragons found"
     />
   );
 }

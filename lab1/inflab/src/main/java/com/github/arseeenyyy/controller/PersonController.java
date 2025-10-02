@@ -65,10 +65,4 @@ public class PersonController {
                     .build();
         }
     }
-    
-    @GET
-    @Path("/eye-color/{color}")
-    public List<PersonResponseDto> findByEyeColor(@PathParam("color") String color) {
-        return personService.findByEyeColor(color);
-    }
 }

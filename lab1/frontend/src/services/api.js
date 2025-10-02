@@ -1,4 +1,3 @@
-// src/services/api.js
 const API_BASE = 'http://localhost:8080/inflab/api';
 
 const api = {
@@ -48,7 +47,6 @@ const api = {
   },
 };
 
-// Сервисы для каждой сущности
 export const dragonService = {
   getAll: () => api.get('/dragons'),
   getById: (id) => api.get(`/dragons/${id}`),
@@ -56,6 +54,10 @@ export const dragonService = {
   update: (id, dragon) => api.put(`/dragons/${id}`, dragon),
   delete: (id) => api.delete(`/dragons/${id}`),
   findByColor: (color) => api.get(`/dragons/color/${color}`),
+  // Добавляем специальные операции
+  deleteAllByColor: (color) => api.delete(`/dragons/color/${color}/all`),
+  deleteOneByColor: (color) => api.delete(`/dragons/color/${color}/one`),
+  findByNameStartingWith: (substring) => api.get(`/dragons/name-starts-with/${substring}`),
 };
 
 export const coordinatesService = {

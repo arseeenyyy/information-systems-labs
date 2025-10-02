@@ -18,7 +18,6 @@ public class PersonRepository {
         entityManager.persist(person); 
         return person;
     } 
-
     public List<Person> findAll() {
         return entityManager.createQuery("SELECT p FROM Person p", Person.class)
             .getResultList();
@@ -43,24 +42,5 @@ public class PersonRepository {
     @Transactional
     public Person update(Person person) {
         return entityManager.merge(person);
-    }
-
-    public List<Person> findByEyeColor(String eyeColor) {
-        return entityManager.createQuery(
-            "SELECT p FROM Person p WHERE p.eyeColor = :eyeColor", Person.class)
-            .setParameter("eyeColor", eyeColor)
-            .getResultList();
-    }
-    public List<Person> findByTeamId(Long teamId) {
-        return entityManager.createQuery(
-            "SELECT p FROM Person p WHERE p.teamId = :teamId", Person.class)
-            .setParameter("teamId", teamId)
-            .getResultList();
-    }
-
-    public List<Person> findWithoutTeam() {
-        return entityManager.createQuery(
-            "SELECT p FROM Person p WHERE p.teamId IS NULL", Person.class)
-            .getResultList();
     }
 }

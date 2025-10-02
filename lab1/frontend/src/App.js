@@ -1,6 +1,6 @@
 import React from 'react';
 import DragonsPage from './pages/DragonsPage';
-import './App.css';
+import './styles/global.css';
 
 function App() {
   return (

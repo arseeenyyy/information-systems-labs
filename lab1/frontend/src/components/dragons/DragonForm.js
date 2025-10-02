@@ -3,6 +3,7 @@ import Modal from '../common/Modal';
 import CreateCoordinatesForm from '../forms/CoordinatesForm';
 import CreateCaveForm from '../forms/CaveForm';
 import CreateHeadForm from '../forms/HeadForm';
+import '../../styles/dragonForm.css';
 
 function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelatedEntityCreated }) {
   const [formData, setFormData] = useState({
@@ -54,8 +55,6 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    console.log('Form submitted with data:', formData);
-    
     const newErrors = {};
     
     if (!formData.name?.trim()) {
@@ -72,7 +71,6 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
     }
 
     if (Object.keys(newErrors).length > 0) {
-      console.log('Validation errors:', newErrors);
       setErrors(newErrors);
       return;
     }
@@ -89,12 +87,10 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
       headId: formData.headId && formData.headId !== '' ? parseInt(formData.headId) : null
     };
 
-    console.log('Sending dragon data to parent:', dragonData);
     onSave(dragonData);
   };
 
   const handleChange = (field, value) => {
-    console.log(`Field ${field} changed to:`, value);
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
@@ -102,16 +98,10 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
   };
 
   const handleRelatedEntityCreated = (type, newEntity) => {
-    console.log(`New ${type} created:`, newEntity);
-    
-    // Уведомляем родительский компонент о новой сущности
     if (onRelatedEntityCreated) {
       onRelatedEntityCreated(type, newEntity);
-    } else {
-      console.warn('onRelatedEntityCreated callback is not provided');
     }
     
-    // Автоматически выбираем новую созданную сущность
     const fieldMap = {
       coordinates: 'coordinatesId',
       caves: 'caveId',
@@ -121,9 +111,7 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
     const fieldName = fieldMap[type];
     
     setFormData(prev => ({ ...prev, [fieldName]: newEntity.id.toString() }));
-    console.log(`Auto-selected ${type} with ID:`, newEntity.id);
     
-    // Закрываем модальное окно создания
     switch (type) {
       case 'coordinates':
         setShowCreateCoordinates(false);
@@ -142,7 +130,6 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
   const renderObjectSelector = (type, label, required = false, showCreateButton = true) => {
     const objects = existingObjects[type] || [];
     
-    // Маппинг типов на имена полей в formData
     const fieldMap = {
       coordinates: 'coordinatesId',
       caves: 'caveId',
@@ -152,11 +139,6 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
     const fieldName = fieldMap[type];
     const currentValue = formData[fieldName] || '';
 
-    console.log(`Rendering ${type} selector:`);
-    console.log('Field name:', fieldName);
-    console.log('Current value:', currentValue);
-    console.log('Available objects:', objects);
-
     const getCreateModal = () => {
       switch (type) {
         case 'coordinates':
@@ -164,14 +146,8 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
             <CreateCoordinatesForm
               key="coordinates-form"
               isOpen={showCreateCoordinates}
-              onClose={() => {
-                console.log('Closing coordinates form');
-                setShowCreateCoordinates(false);
-              }}
-              onSave={(coordinates) => {
-                console.log('Coordinates form saved:', coordinates);
-                handleRelatedEntityCreated('coordinates', coordinates);
-              }}
+              onClose={() => setShowCreateCoordinates(false)}
+              onSave={(coordinates) => handleRelatedEntityCreated('coordinates', coordinates)}
             />
           );
         case 'caves':
@@ -198,9 +174,9 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
     };
 
     return (
-      <div style={{ marginBottom: '15px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
-          <label style={{ fontWeight: '500' }}>
+      <div className="object-selector">
+        <div className="object-selector-header">
+          <label className="object-selector-label">
             {label} {required && '*'}
           </label>
           {showCreateButton && (
@@ -221,8 +197,7 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
                     break;
                 }
               }}
-              className="btn btn-outline-primary"
-              style={{ fontSize: '12px', padding: '4px 8px' }}
+              className="btn btn-outline-primary object-selector-create-btn"
             >
               + Create New
             </button>
@@ -232,13 +207,7 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
         <select
           value={currentValue}
           onChange={(e) => handleChange(fieldName, e.target.value)}
-          style={{
-            width: '100%',
-            padding: '8px 12px',
-            border: errors[type] ? '1px solid #dc3545' : '1px solid #ddd',
-            borderRadius: '4px',
-            fontSize: '14px'
-          }}
+          className={`form-control ${errors[type] ? 'error' : ''}`}
         >
           <option value="">Select {label}</option>
           {objects.map(obj => (
@@ -251,7 +220,7 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
           ))}
         </select>
         {errors[type] && (
-          <div style={{ color: '#dc3545', fontSize: '12px', marginTop: '5px' }}>
+          <div className="form-error">
             {errors[type]}
           </div>
         )}
@@ -266,39 +235,34 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
       isOpen={isOpen} 
       onClose={onClose}
       title={dragon ? 'Edit Dragon' : 'Create New Dragon'}
+      size="large"
     >
-      <form onSubmit={handleSubmit} style={{ minWidth: '500px' }}>
+      <form onSubmit={handleSubmit} className="dragon-form">
         {/* Basic Information */}
-        <div style={{ marginBottom: '20px' }}>
-          <h3 style={{ marginBottom: '15px', color: '#333' }}>Basic Information</h3>
+        <div className="dragon-form-section">
+          <h3 className="dragon-form-section-title">Basic Information</h3>
           
-          <div style={{ marginBottom: '15px' }}>
-            <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
+          <div className="form-group">
+            <label className="form-label">
               Name *
             </label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => handleChange('name', e.target.value)}
-              style={{
-                width: '100%',
-                padding: '8px 12px',
-                border: errors.name ? '1px solid #dc3545' : '1px solid #ddd',
-                borderRadius: '4px',
-                fontSize: '14px'
-              }}
+              className={`form-control ${errors.name ? 'error' : ''}`}
               placeholder="Enter dragon name"
             />
             {errors.name && (
-              <div style={{ color: '#dc3545', fontSize: '12px', marginTop: '5px' }}>
+              <div className="form-error">
                 {errors.name}
               </div>
             )}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '15px' }}>
-            <div>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
+          <div className="dragon-form-grid mb-15">
+            <div className="form-group">
+              <label className="form-label">
                 Age *
               </label>
               <input
@@ -306,24 +270,18 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
                 value={formData.age}
                 onChange={(e) => handleChange('age', e.target.value)}
                 min="1"
-                style={{
-                  width: '100%',
-                  padding: '8px 12px',
-                  border: errors.age ? '1px solid #dc3545' : '1px solid #ddd',
-                  borderRadius: '4px',
-                  fontSize: '14px'
-                }}
+                className={`form-control ${errors.age ? 'error' : ''}`}
                 placeholder="Enter age"
               />
               {errors.age && (
-                <div style={{ color: '#dc3545', fontSize: '12px', marginTop: '5px' }}>
+                <div className="form-error">
                   {errors.age}
                 </div>
               )}
             </div>
 
-            <div>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
+            <div className="form-group">
+              <label className="form-label">
                 Weight *
               </label>
               <input
@@ -332,38 +290,26 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
                 value={formData.weight}
                 onChange={(e) => handleChange('weight', e.target.value)}
                 min="0.1"
-                style={{
-                  width: '100%',
-                  padding: '8px 12px',
-                  border: errors.weight ? '1px solid #dc3545' : '1px solid #ddd',
-                  borderRadius: '4px',
-                  fontSize: '14px'
-                }}
+                className={`form-control ${errors.weight ? 'error' : ''}`}
                 placeholder="Enter weight"
               />
               {errors.weight && (
-                <div style={{ color: '#dc3545', fontSize: '12px', marginTop: '5px' }}>
+                <div className="form-error">
                   {errors.weight}
                 </div>
               )}
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-            <div>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
+          <div className="dragon-form-grid">
+            <div className="form-group">
+              <label className="form-label">
                 Color
               </label>
               <select
                 value={formData.color || ''}
                 onChange={(e) => handleChange('color', e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '8px 12px',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  fontSize: '14px'
-                }}
+                className="form-control"
               >
                 <option value="">Select Color</option>
                 <option value="GREEN">GREEN</option>
@@ -372,20 +318,14 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
               </select>
             </div>
 
-            <div>
-              <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
+            <div className="form-group">
+              <label className="form-label">
                 Character
               </label>
               <select
                 value={formData.character || ''}
                 onChange={(e) => handleChange('character', e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '8px 12px',
-                  border: '1px solid #ddd',
-                  borderRadius: '4px',
-                  fontSize: '14px'
-                }}
+                className="form-control"
               >
                 <option value="">Select Character</option>
                 <option value="EVIL">EVIL</option>
@@ -397,8 +337,8 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
         </div>
 
         {/* Related Objects */}
-        <div style={{ marginBottom: '20px' }}>
-          <h3 style={{ marginBottom: '15px', color: '#333' }}>Related Objects</h3>
+        <div className="dragon-form-section">
+          <h3 className="dragon-form-section-title">Related Objects</h3>
           
           {renderObjectSelector('coordinates', 'Coordinates', true)}
           {renderObjectSelector('caves', 'Dragon Cave')}
@@ -407,7 +347,7 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelate
         </div>
 
         {/* Buttons */}
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '20px' }}>
+        <div className="modal-footer">
           <button
             type="submit"
             className="btn btn-primary"

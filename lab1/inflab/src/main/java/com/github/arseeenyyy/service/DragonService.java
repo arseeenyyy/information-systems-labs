@@ -98,4 +98,27 @@ public class DragonService {
                 .map(DragonMapper::toResponseDto)
                 .collect(Collectors.toList());
     }
+    @Transactional
+    public void deleteAllByColor(String color) {
+        List<Dragon> dragons = dragonRepository.findByColor(color);
+        for (Dragon dragon : dragons) {
+            dragonRepository.delete(dragon.getId());
+        }
+    }
+    
+    @Transactional
+    public void deleteOneByColor(String color) {
+        List<Dragon> dragons = dragonRepository.findByColor(color);
+        if (!dragons.isEmpty()) {
+            dragonRepository.delete(dragons.get(0).getId());
+        }
+    }
+    
+    @Transactional
+    public List<DragonResponseDto> findByNameStartingWith(String substring) {
+        List<Dragon> dragons = dragonRepository.findByNameStartingWith(substring);
+        return dragons.stream()
+                .map(DragonMapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
 }

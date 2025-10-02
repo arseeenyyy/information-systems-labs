@@ -1,23 +1,14 @@
 import React from 'react';
+import '../../styles/entityTable.css';
 
-function EntityTable({ columns, data, onRowClick }) {
+function EntityTable({ columns, data, onRowClick, emptyMessage = "No data available" }) {
   return (
-    <div style={{ overflowX: 'auto' }}>
-      <table style={{
-        width: '100%',
-        borderCollapse: 'collapse',
-        backgroundColor: 'white'
-      }}>
+    <div className="table-container">
+      <table className="entity-table">
         <thead>
-          <tr style={{ backgroundColor: '#f8f9fa' }}>
+          <tr>
             {columns.map((column, index) => (
-              <th key={index} style={{
-                padding: '12px 16px',
-                textAlign: 'left',
-                borderBottom: '2px solid #dee2e6',
-                fontWeight: '600',
-                color: '#495057'
-              }}>
+              <th key={index}>
                 {column.title}
               </th>
             ))}
@@ -28,23 +19,10 @@ function EntityTable({ columns, data, onRowClick }) {
             <tr
               key={item.id}
               onClick={() => onRowClick && onRowClick(item)}
-              style={{
-                cursor: onRowClick ? 'pointer' : 'default',
-                transition: 'background-color 0.2s',
-                borderBottom: '1px solid #dee2e6'
-              }}
-              onMouseEnter={(e) => {
-                if (onRowClick) e.currentTarget.style.backgroundColor = '#f8f9fa';
-              }}
-              onMouseLeave={(e) => {
-                if (onRowClick) e.currentTarget.style.backgroundColor = 'transparent';
-              }}
+              className={onRowClick ? 'clickable' : ''}
             >
               {columns.map((column, colIndex) => (
-                <td key={colIndex} style={{
-                  padding: '12px 16px',
-                  borderBottom: '1px solid #dee2e6'
-                }}>
+                <td key={colIndex}>
                   {column.render ? column.render(item[column.key], item) : item[column.key]}
                 </td>
               ))}
@@ -53,13 +31,8 @@ function EntityTable({ columns, data, onRowClick }) {
         </tbody>
       </table>
       {data.length === 0 && (
-        <div style={{
-          textAlign: 'center',
-          padding: '40px',
-          color: '#6c757d',
-          backgroundColor: 'white'
-        }}>
-          No data available
+        <div className="table-empty">
+          {emptyMessage}
         </div>
       )}
     </div>

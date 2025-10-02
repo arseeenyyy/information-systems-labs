@@ -1,6 +1,5 @@
 package com.github.arseeenyyy.models;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,10 +9,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,9 +42,8 @@ public class Person {
     @Column(name = "hair_color", nullable = false) 
     private Color hairColor; //Поле может быть null
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) 
+    @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "location_id") 
-    @NotNull
     private Location location; //Поле может быть null
     
     @Column(name = "height", nullable = false) 
@@ -56,6 +53,4 @@ public class Person {
     @Enumerated(EnumType.STRING) 
     private Country nationality; //Поле может быть null
 
-    @Column(name = "team_id") 
-    private Long teamId;
 }
