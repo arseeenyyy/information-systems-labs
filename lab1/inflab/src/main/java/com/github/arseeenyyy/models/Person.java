@@ -55,4 +55,7 @@ public class Person {
     
     @Enumerated(EnumType.STRING) 
     private Country nationality; //Поле может быть null
+
+    @Column(name = "team_id") 
+    private Long teamId;
 }
