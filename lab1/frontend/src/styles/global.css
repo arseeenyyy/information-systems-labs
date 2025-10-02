@@ -133,7 +133,6 @@ body {
   margin-top: 5px;
 }
 
-/* Утилиты */
 .text-center {
   text-align: center;
 }
@@ -151,3 +150,36 @@ body {
 .p-0 { padding: 0; }
 .p-15 { padding: 15px; }
 .p-20 { padding: 20px; }
+
+.dragons-page,
+.special-operations-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.btn-warning {
+  background-color: var(--warning-color);
+  color: #212529;
+  border-color: var(--warning-color);
+}
+
+.btn-warning:hover:not(:disabled) {
+  background-color: #e0a800;
+  border-color: #d39e00;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .nav-links {
+    gap: 1rem;
+  }
+}

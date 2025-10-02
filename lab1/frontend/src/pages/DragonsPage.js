@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import DragonTable from '../components/dragons/DragonTable';
 import DragonForm from '../components/dragons/DragonForm';
 import DragonDetails from '../components/dragons/DragonDetails';
-import '../styles/dragonsPage.css'
+import Header from '../components/common/Header';
+import '../styles/dragonsPage.css';
 import { 
   dragonService, 
   coordinatesService, 
@@ -125,89 +126,84 @@ function DragonsPage() {
   const handleViewDragon = (dragon) => {
     setViewingDragon(dragon);
   };
-
-  const refreshData = () => {
-    loadAllData();
-  };
-
   if (loading) {
     return (
-      <div className="container">
-        <div className="loading-container">
-          Loading dragons and related objects...
+      <>
+        <Header />
+        <div className="container">
+          <div className="loading-container">
+            Loading dragons and related objects...
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   if (error) {
     return (
-      <div className="container">
-        <div className="error-container">
-          Error: {error}
-          <br />
-          <button onClick={refreshData} className="btn btn-primary mt-15">
-            Retry
-          </button>
+      <>
+        <Header />
+        <div className="container">
+          <div className="error-container">
+            Error: {error}
+            <br />
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="container">
-      <div className="dragons-header">
-        <h1 className="dragons-title">Dragons Management System</h1>
-        <div className="dragons-actions">
-          <button 
-            onClick={refreshData}
-            className="btn btn-secondary"
-          >
-            Refresh Data
-          </button>
-          <button 
-            onClick={() => setShowCreateModal(true)}
-            className="btn btn-primary"
-          >
-            Create New Dragon
-          </button>
+    <div className="dragons-page">
+      <Header />
+      <div className="container">
+        <div className="dragons-header">
+          <h1 className="dragons-title">Dragons Management</h1>
+          <div className="dragons-actions">
+            <button 
+              onClick={() => setShowCreateModal(true)}
+              className="btn btn-primary"
+            >
+              Create New Dragon
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div className="dragons-count">
-        Total dragons: {dragons.length}
-      </div>
+        <div className="dragons-count">
+          Total dragons: {dragons.length}
+        </div>
 
-      <DragonTable
-        dragons={dragons}
-        onRowClick={handleViewDragon}
-      />
-
-      <DragonForm
-        isOpen={showCreateModal}
-        onClose={() => setShowCreateModal(false)}
-        onSave={handleCreateDragon}
-        existingObjects={availableObjects}
-        onRelatedEntityCreated={handleRelatedEntityCreated}
-      />
-
-      <DragonForm
-        isOpen={!!editingDragon}
-        onClose={() => setEditingDragon(null)}
-        dragon={editingDragon}
-        onSave={handleEditDragon}
-        existingObjects={availableObjects}
-        onRelatedEntityCreated={handleRelatedEntityCreated}
-      />
-
-      {viewingDragon && (
-        <DragonDetails
-          dragon={viewingDragon}
-          onClose={() => setViewingDragon(null)}
-          onEdit={setEditingDragon}
-          onDelete={handleDeleteDragon}
+        <DragonTable
+          dragons={dragons}
+          onRowClick={handleViewDragon}
         />
-      )}
+
+        <DragonForm
+          isOpen={showCreateModal}
+          onClose={() => setShowCreateModal(false)}
+          onSave={handleCreateDragon}
+          existingObjects={availableObjects}
+          onRelatedEntityCreated={handleRelatedEntityCreated}
+        />
+
+        <DragonForm
+          isOpen={!!editingDragon}
+          onClose={() => setEditingDragon(null)}
+          dragon={editingDragon}
+          onSave={handleEditDragon}
+          existingObjects={availableObjects}
+          onRelatedEntityCreated={handleRelatedEntityCreated}
+        />
+
+        {viewingDragon && (
+          <DragonDetails
+            dragon={viewingDragon}
+            onClose={() => setViewingDragon(null)}
+            onEdit={setEditingDragon}
+            onDelete={handleDeleteDragon}
+          />
+        )}
+      </div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 const API_BASE = 'http://localhost:8080/inflab/api';
 
+
 const api = {
   async request(url, options = {}) {
     const response = await fetch(`${API_BASE}${url}`, {
@@ -11,15 +12,17 @@ const api = {
     });
 
     if (!response.ok) {
-      const error = await response.text();
-      throw new Error(error || `HTTP error! status: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(errorText || `HTTP error! status: ${response.status}`);
     }
 
-    if (response.status === 204) {
-      return null;
+    // Для DELETE операций, которые возвращают текст
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return await response.json();
+    } else {
+      return await response.text();
     }
-
-    return response.json();
   },
 
   get(url) {
