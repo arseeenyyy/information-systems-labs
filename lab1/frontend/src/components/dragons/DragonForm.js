@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
+import CreateCoordinatesForm from '../forms/CoordinatesForm';
+import CreateCaveForm from '../forms/CaveForm';
+import CreateHeadForm from '../forms/HeadForm';
 
-function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
+function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects, onRelatedEntityCreated }) {
   const [formData, setFormData] = useState({
     name: '',
     age: '',
@@ -15,6 +18,9 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
   });
 
   const [errors, setErrors] = useState({});
+  const [showCreateCoordinates, setShowCreateCoordinates] = useState(false);
+  const [showCreateCave, setShowCreateCave] = useState(false);
+  const [showCreateHead, setShowCreateHead] = useState(false);
 
   useEffect(() => {
     if (dragon) {
@@ -45,70 +51,184 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
     setErrors({});
   }, [dragon, isOpen]);
 
-    const handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     
+    console.log('Form submitted with data:', formData);
+    
+    const newErrors = {};
+    
     if (!formData.name?.trim()) {
-        setErrors({ name: 'Name is required' });
-        return;
+      newErrors.name = 'Name is required';
     }
     if (!formData.age || formData.age <= 0) {
-        setErrors({ age: 'Age must be greater than 0' });
-        return;
+      newErrors.age = 'Age must be greater than 0';
     }
     if (!formData.weight || formData.weight <= 0) {
-        setErrors({ weight: 'Weight must be greater than 0' });
-        return;
+      newErrors.weight = 'Weight must be greater than 0';
     }
     if (!formData.coordinatesId) {
-        setErrors({ coordinates: 'Coordinates are required' });
-        return;
+      newErrors.coordinates = 'Coordinates are required';
     }
 
-    const coordinatesId = parseInt(formData.coordinatesId);
-    if (isNaN(coordinatesId) || coordinatesId <= 0) {
-        setErrors({ coordinates: 'Please select valid coordinates' });
-        return;
+    if (Object.keys(newErrors).length > 0) {
+      console.log('Validation errors:', newErrors);
+      setErrors(newErrors);
+      return;
     }
 
     const dragonData = {
-        name: formData.name.trim(),
-        age: parseInt(formData.age),
-        weight: parseFloat(formData.weight),
-        color: formData.color || null,
-        character: formData.character || null,
-        coordinatesId: coordinatesId,
-        caveId: formData.caveId && formData.caveId !== '' ? parseInt(formData.caveId) : null,
-        killerId: formData.killerId && formData.killerId !== '' ? parseInt(formData.killerId) : null,
-        headId: formData.headId && formData.headId !== '' ? parseInt(formData.headId) : null
+      name: formData.name.trim(),
+      age: parseInt(formData.age),
+      weight: parseFloat(formData.weight),
+      color: formData.color || null,
+      character: formData.character || null,
+      coordinatesId: parseInt(formData.coordinatesId),
+      caveId: formData.caveId && formData.caveId !== '' ? parseInt(formData.caveId) : null,
+      killerId: formData.killerId && formData.killerId !== '' ? parseInt(formData.killerId) : null,
+      headId: formData.headId && formData.headId !== '' ? parseInt(formData.headId) : null
     };
 
-    if (!dragonData.coordinatesId) {
-        setErrors({ coordinates: 'Coordinates are required' });
-        return;
-    }
-
-    console.log('Sending dragon data:', dragonData);
+    console.log('Sending dragon data to parent:', dragonData);
     onSave(dragonData);
-    };
+  };
 
   const handleChange = (field, value) => {
+    console.log(`Field ${field} changed to:`, value);
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
   };
 
-  const renderObjectSelector = (type, label, required = false) => {
+  const handleRelatedEntityCreated = (type, newEntity) => {
+    console.log(`New ${type} created:`, newEntity);
+    
+    // Уведомляем родительский компонент о новой сущности
+    if (onRelatedEntityCreated) {
+      onRelatedEntityCreated(type, newEntity);
+    } else {
+      console.warn('onRelatedEntityCreated callback is not provided');
+    }
+    
+    // Автоматически выбираем новую созданную сущность
+    const fieldMap = {
+      coordinates: 'coordinatesId',
+      caves: 'caveId',
+      persons: 'killerId',
+      heads: 'headId'
+    };
+    const fieldName = fieldMap[type];
+    
+    setFormData(prev => ({ ...prev, [fieldName]: newEntity.id.toString() }));
+    console.log(`Auto-selected ${type} with ID:`, newEntity.id);
+    
+    // Закрываем модальное окно создания
+    switch (type) {
+      case 'coordinates':
+        setShowCreateCoordinates(false);
+        break;
+      case 'caves':
+        setShowCreateCave(false);
+        break;
+      case 'heads':
+        setShowCreateHead(false);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const renderObjectSelector = (type, label, required = false, showCreateButton = true) => {
     const objects = existingObjects[type] || [];
-    const fieldName = `${type}Id`;
+    
+    // Маппинг типов на имена полей в formData
+    const fieldMap = {
+      coordinates: 'coordinatesId',
+      caves: 'caveId',
+      persons: 'killerId', 
+      heads: 'headId'
+    };
+    const fieldName = fieldMap[type];
     const currentValue = formData[fieldName] || '';
+
+    console.log(`Rendering ${type} selector:`);
+    console.log('Field name:', fieldName);
+    console.log('Current value:', currentValue);
+    console.log('Available objects:', objects);
+
+    const getCreateModal = () => {
+      switch (type) {
+        case 'coordinates':
+          return (
+            <CreateCoordinatesForm
+              key="coordinates-form"
+              isOpen={showCreateCoordinates}
+              onClose={() => {
+                console.log('Closing coordinates form');
+                setShowCreateCoordinates(false);
+              }}
+              onSave={(coordinates) => {
+                console.log('Coordinates form saved:', coordinates);
+                handleRelatedEntityCreated('coordinates', coordinates);
+              }}
+            />
+          );
+        case 'caves':
+          return (
+            <CreateCaveForm
+              key="cave-form"
+              isOpen={showCreateCave}
+              onClose={() => setShowCreateCave(false)}
+              onSave={(cave) => handleRelatedEntityCreated('caves', cave)}
+            />
+          );
+        case 'heads':
+          return (
+            <CreateHeadForm
+              key="head-form"
+              isOpen={showCreateHead}
+              onClose={() => setShowCreateHead(false)}
+              onSave={(head) => handleRelatedEntityCreated('heads', head)}
+            />
+          );
+        default:
+          return null;
+      }
+    };
 
     return (
       <div style={{ marginBottom: '15px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
-          {label} {required && '*'}
-        </label>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
+          <label style={{ fontWeight: '500' }}>
+            {label} {required && '*'}
+          </label>
+          {showCreateButton && (
+            <button
+              type="button"
+              onClick={() => {
+                switch (type) {
+                  case 'coordinates':
+                    setShowCreateCoordinates(true);
+                    break;
+                  case 'caves':
+                    setShowCreateCave(true);
+                    break;
+                  case 'heads':
+                    setShowCreateHead(true);
+                    break;
+                  default:
+                    break;
+                }
+              }}
+              className="btn btn-outline-primary"
+              style={{ fontSize: '12px', padding: '4px 8px' }}
+            >
+              + Create New
+            </button>
+          )}
+        </div>
+        
         <select
           value={currentValue}
           onChange={(e) => handleChange(fieldName, e.target.value)}
@@ -135,6 +255,8 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
             {errors[type]}
           </div>
         )}
+        
+        {showCreateButton && getCreateModal()}
       </div>
     );
   };
@@ -280,7 +402,7 @@ function DragonForm({ isOpen, onClose, dragon, onSave, existingObjects }) {
           
           {renderObjectSelector('coordinates', 'Coordinates', true)}
           {renderObjectSelector('caves', 'Dragon Cave')}
-          {renderObjectSelector('persons', 'Killer (Person)')}
+          {renderObjectSelector('persons', 'Killer (Person)', false, false)}
           {renderObjectSelector('heads', 'Dragon Head')}
         </div>
 

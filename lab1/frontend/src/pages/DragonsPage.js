@@ -102,6 +102,12 @@ function DragonsPage() {
       alert(`Error updating dragon: ${err.message}`);
     }
   };
+  const handleRelatedEntityCreated = (type, newEntity) => {
+  setAvailableObjects(prev => ({
+    ...prev,
+    [type]: [...prev[type], newEntity]
+  }));
+  };
 
   const handleDeleteDragon = async (id) => {
     try {
@@ -180,6 +186,7 @@ function DragonsPage() {
         onClose={() => setShowCreateModal(false)}
         onSave={handleCreateDragon}
         existingObjects={availableObjects}
+        onRelatedEntityCreated={handleRelatedEntityCreated} // Добавляем эту строку
       />
 
       <DragonForm
@@ -188,8 +195,8 @@ function DragonsPage() {
         dragon={editingDragon}
         onSave={handleEditDragon}
         existingObjects={availableObjects}
+        onRelatedEntityCreated={handleRelatedEntityCreated} // И эту строку
       />
-
       {viewingDragon && (
         <DragonDetails
           dragon={viewingDragon}
